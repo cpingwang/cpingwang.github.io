@@ -1,29 +1,20 @@
 ---
 title: Hexo with Git
 ---
-Hexo with Git的指令
 
-### Hexo的指令
-``` bash
+```
+Hexo的指令：
 $ hexo clean
-```
-``` bash
 $ hexo generate
-```
-``` bash
 $ hexo deploy
-```
-``` bash
 $ hexo server
 ```
 More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
-### Git的指令
-``` bash
-git add .
+
+
 ```
-``` bash
-git commit -a -m "comments"
-```
-``` bash
-git push origin hexo
+Git的指令：
+$ git add .
+$ git commit -a -m "comments"
+$ git push origin hexo
 ```

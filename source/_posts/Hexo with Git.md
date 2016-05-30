@@ -27,3 +27,13 @@ Git的指令
     將Commit的內容推送到Git:
     $ git push origin hexo
 ---
+重抓的步驟
+    
+	$ git clone [url] [folder]
+	
+    $ CD [folder]
+	
+    $ git checkout hexo
+	
+    $ npm install
+---

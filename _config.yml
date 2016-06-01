@@ -64,7 +64,6 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 #theme: hexo-theme-freemind-master
-#theme: very-simple-master
 theme: hexo-theme-clean-blog-master
 
 # Deployment

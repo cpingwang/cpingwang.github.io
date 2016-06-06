@@ -11,19 +11,18 @@
     <!--Description-->
     
         <meta name="description" content="Hexo的指令
-$ hexo clean
+&amp;gt; hexo clean
 
-$ hexo generate
+重新產生(有修改就要重新generate)
+&amp;gt; hexo generate
 
 發佈文章:
-$ hexo deploy
+&amp;gt; hexo deploy
 
-$ hexo server
+執行此命令才能在本地使用http://localhost:4000/做測試:
+&amp;gt; hexo server
 
-More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
-
-Git的指令
-將異動加入Git">
+Mo">
     
 
     <!--Author-->
@@ -176,35 +175,52 @@ Git的指令
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <p>Hexo的指令</p>
-<pre><code>$ hexo clean
+<pre><code>&gt; hexo clean
 
-$ hexo generate
+重新產生(有修改就要重新generate)
+&gt; hexo generate
 
 發佈文章:
-$ hexo deploy
+&gt; hexo deploy
 
-$ hexo server
+執行此命令才能在本地使用http://localhost:4000/做測試:
+&gt; hexo server
 
 More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
 </code></pre><hr>
 <p>Git的指令</p>
 <pre><code>將異動加入Git:
-$ git add .
+&gt; git add .
 
 Commit本地並加上注解說明:
-$ git commit -a -m &quot;comments&quot;
+&gt; git commit -a -m &quot;comments&quot;
 
 將Commit的內容推送到Git:
-$ git push origin hexo
+&gt; git push origin hexo
 </code></pre><hr>
 <p>重抓的步驟</p>
-<pre><code>$ git clone [url] [folder]
+<pre><code>1&gt; git clone [url] [folder]
 
-$ CD [folder]
+2&gt; CD [folder]
 
-$ git checkout hexo
+切換到hexo的branch
+3&gt; git checkout hexo
 
-$ npm install
+若目錄尚未安裝npm套件,需執行此命令產生node_modules的目錄
+4&gt; npm install
+
+使用npm安裝hexo的command line interface功能
+5&gt; npm install hexo-cli -g
+
+
+ex.
+[url]= &quot;https://github.com/cpingwang/cpingwang.github.io.git&quot;
+[folder]= &quot;D:\blog_test&quot;
+
+Open a &quot;Git Shell&quot;
+1&gt; git clone &quot;https://github.com/cpingwang/cpingwang.github.io.git&quot; &quot;D:\blog_test&quot;
+2&gt; CD &quot;D:\blog_test&quot;
+3&gt; git checkout hexo
 </code></pre><hr>
 
 

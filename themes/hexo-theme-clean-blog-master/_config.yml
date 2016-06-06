@@ -3,14 +3,14 @@ menu:
   Home: /
   Archives: /archives
   Github:
-    url: http://http://cpingwang.github.io/
+    url: http://cpingwang.github.io/
     icon: github
 
 # Title on top left of menu. Leave empty to use main blog title
 menu_title: Ping
 
 # URL of the Home page image
-index_cover: http://www.codeblocq.com/assets/projects/hexo-theme-clean-blog/img/home-bg.jpg
+index_cover: /img/home-bg.jpg
 
 # Default post title
 default_post_title: untitled

@@ -29,10 +29,11 @@ Git的指令
     > git add .
     
     Commit本地並加上注解說明:
-    > git commit -a -m "comments"
+    > git commit -a -m "update"
     
     將Commit的內容推送到Git:
     > git push origin hexo
+	
 	
 	將Git上的修改更新到本地端:
     > git pull origin hexo

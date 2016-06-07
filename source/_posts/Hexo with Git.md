@@ -1,10 +1,15 @@
 ﻿---
 title: Hexo with Git
+date: 2016-05-26 18:23:33
+tags:
 ---
-
 
 Hexo的指令
 
+    產生新文章
+    > hexo new [layout] <title>
+	> hexo new filetitle
+	
     > hexo clean
     
 	重新產生(有修改就要重新generate)
@@ -28,6 +33,9 @@ Git的指令
     
     將Commit的內容推送到Git:
     > git push origin hexo
+	
+	將Git上的修改更新到本地端:
+    > git pull origin hexo
 
 ---
 重抓的步驟

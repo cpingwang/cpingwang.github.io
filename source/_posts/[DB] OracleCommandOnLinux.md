@@ -1,7 +1,8 @@
 ---
 title: Oracle Command On Linux
+date: 2016-06-07 10:54:38
+tags: DB
 ---
-
 
 用root登入DB後,切換為oracle的使用者:    
     # su - oracle

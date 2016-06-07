@@ -1,4 +1,4 @@
----
+﻿---
 title: Hexo with Git
 ---
 
@@ -39,21 +39,24 @@ Git的指令
 	切換到hexo的branch
     3> git checkout hexo
 	
-	若目錄尚未安裝npm套件,需執行此命令產生node_modules的目錄
-    4> npm install
+    4.PC需安裝Node.js    
+    安裝檔下載：https://nodejs.org/en/download/。
+
+    若目錄尚未安裝npm套件,需執行此命令產生node_modules的目錄
+    5> npm install
 	
-	使用npm安裝hexo的command line interface功能
-	5> npm install hexo-cli -g
+    使用npm安裝hexo的command line interface功能
+    6> npm install hexo-cli -g
 	
 	
-	ex.
-	[url]= "https://github.com/cpingwang/cpingwang.github.io.git"
-	[folder]= "D:\blog_test"
+    ex.
+    [url]= "https://github.com/cpingwang/cpingwang.github.io.git"
+    [folder]= "D:\blog_test"
 	
-	Open a "Git Shell"
-	1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog_test"
-	2> CD "D:\blog_test"
-	3> git checkout hexo
+    Open a "Git Shell"
+    1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog_test"
+    2> CD "D:\blog_test"
+    3> git checkout hexo
 	
 	
 ---

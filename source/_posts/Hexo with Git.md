@@ -17,7 +17,7 @@ Hexo的指令
     
     發佈文章:
     > hexo deploy
-     
+    
 	執行此命令才能在本地使用http://localhost:4000/做測試:
     > hexo server
     

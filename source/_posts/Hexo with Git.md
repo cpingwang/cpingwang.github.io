@@ -60,11 +60,11 @@ Git的指令
 	
     ex.
     [url]= "https://github.com/cpingwang/cpingwang.github.io.git"
-    [folder]= "D:\blog_test"
+    [folder]= "D:\blog"
 	
     Open a "Git Shell"
-    1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog_test"
-    2> CD "D:\blog_test"
+    1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog"
+    2> CD "D:\blog"
     3> git checkout hexo
 	
 	

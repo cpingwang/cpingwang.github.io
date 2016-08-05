@@ -5,10 +5,10 @@ tags:
 ---
 
 Hexo的指令
-
+---
     產生新文章
     > hexo new [layout] <title>
-	> hexo new filetitle
+	> hexo new "file title"
 	
     > hexo clean
     
@@ -24,7 +24,7 @@ Hexo的指令
     More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
 ---
 Git的指令
-
+---
     將異動加入Git:
     > git add .
     
@@ -40,7 +40,7 @@ Git的指令
 
 ---
 重抓的步驟
-    
+---   
 	1> git clone [url] [folder]
 	
     2> CD [folder]

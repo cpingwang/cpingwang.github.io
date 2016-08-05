@@ -4,17 +4,18 @@ date: 2016-06-07 10:54:38
 tags: DB
 ---
 
-用root登入DB後,切換為oracle的使用者:    
+用root登入DB後,切換為oracle的使用者:
+---
     # su - oracle
 	
 ---
 檢查監聽器狀態:
-
+---
 	$ lsnrctl status
 	
 ---
 DB關閉:
-	
+---
 	關閉監聽器: 
     1)$ lsnrctl stop
     
@@ -24,7 +25,7 @@ DB關閉:
 	
 ---	
 DB開啟:
-
+---
     1)開啟監聽器:
 	$ lsnrctl start
 	
@@ -35,7 +36,7 @@ DB開啟:
 
 ---
 Oracle Enterprise Manager (EM)
-
+---
     查看dbconsole狀態:
     $ emctl status dbconsole
 

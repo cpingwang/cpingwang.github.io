@@ -32,13 +32,12 @@ Git的指令
     Commit本地並加上注解說明:
     > git commit -a -m "update"
     
-    將Commit的內容推送到Git:
+    將Source files推送到Git:
     > git push origin hexo
 	
 	*使用 TravisCI 自動幫發佈 Hexo 部落格請參閱:
 	http://larrynung.github.io/2016/08/11/Hexo-Auto-deploy-with-Travis-CI/
-	(將修改內容推送到Git後會自動clean->generate->deploy)
-	
+	(git commit後就會自動clean->generate->deploy)
 	
 	將Git上的修改更新到本地端:
     > git pull origin hexo

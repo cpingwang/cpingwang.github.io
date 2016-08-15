@@ -23,8 +23,6 @@ Hexo的指令
     
     More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
 	
-	**使用 Travis CI 自動幫發佈 Hexo 部落格請參閱: http://larrynung.github.io/2016/08/11/Hexo-Auto-deploy-with-Travis-CI/
-	
 ---
 Git的指令
 ---
@@ -36,6 +34,10 @@ Git的指令
     
     將Commit的內容推送到Git:
     > git push origin hexo
+	
+	*使用 TravisCI 自動幫發佈 Hexo 部落格請參閱:
+	http://larrynung.github.io/2016/08/11/Hexo-Auto-deploy-with-Travis-CI/
+	(將修改內容推送到Git後會自動clean->generate->deploy)
 	
 	
 	將Git上的修改更新到本地端:

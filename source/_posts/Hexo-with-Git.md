@@ -37,7 +37,7 @@ Git的指令
 	
 	*使用 TravisCI 自動幫發佈 Hexo 部落格請參閱:
 	http://larrynung.github.io/2016/08/11/Hexo-Auto-deploy-with-Travis-CI/
-	(git commit後就會自動clean->generate->deploy)
+	(git push後就會自動clean->generate->deploy)
 	
 	將Git上的修改更新到本地端:
     > git pull origin hexo

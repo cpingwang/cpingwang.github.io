@@ -71,7 +71,6 @@ Git的指令
     2> CD "D:\blog"
     3> git checkout hexo
 	
-	
 ---
 
 在文章中放圖片: http://larrynung.github.io/2016/06/29/Hexo-Post-asset-folder/

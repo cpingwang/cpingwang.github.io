@@ -4,7 +4,7 @@ date: 2016-05-26 18:23:33
 tags:
 ---
 
-Hexo的指令
+Hexo的指令  (Use [Git Shell])
 ---
     產生新文章
     > hexo new [layout] <title>
@@ -67,7 +67,7 @@ Git的指令
     [url]= "https://github.com/cpingwang/cpingwang.github.io.git"
     [folder]= "D:\blog"
 	
-    Open a "Git Shell"
+    Open a [Git Shell]
     1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog"
     2> CD "D:\blog"
     3> git checkout hexo

@@ -11,6 +11,8 @@ Redo
 	They are used for recovery purposes.
 Redo log就是DB的交易記錄，最主要是的用途是復原資料。
 
+{% asset_img redolog.png %}
+
 ---
     Every Oracle database has at least two online redo log groups with at least a single member(redo log file) in each group.
 	These online redo log groups are used in a circular fashion.

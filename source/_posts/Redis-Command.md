@@ -6,7 +6,8 @@ tags:
 
 Redis相關指令
 ---
-    狀態查詢: 
+	查詢Redis狀態:
+	# ps -ef | grep redis
     # service <redis instance name> status
 	ex. service redis_6379 status
 	

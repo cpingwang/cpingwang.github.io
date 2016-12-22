@@ -59,6 +59,8 @@ Sentinel相關指令
     daemonize yes
     logfile /redis/log/sentinel.log
 	
+	protect-mode no (如需遠端連此sentinel才需要這個設定)
+	
 	參考: https://segmentfault.com/a/1190000002680804
 	
 	[修改完sentinel.conf後啟動指令如下:]

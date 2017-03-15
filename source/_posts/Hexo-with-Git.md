@@ -1,7 +1,7 @@
 ﻿---
 title: Hexo with Git
 date: 2016-05-26 18:23:33
-tags:
+tags: Hexo
 ---
 
 Hexo的指令  (Use [Git Shell])

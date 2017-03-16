@@ -32,7 +32,7 @@ DB開啟:
 	用sysdba登入sqlplus
     2)$ sqlplus '/ as sysdba'
     3)SQL> startup
-
+{% asset_img startupDB.png %}
 
 ---
 Oracle Enterprise Manager (EM)

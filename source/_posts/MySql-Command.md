@@ -36,11 +36,14 @@ System相關
 	超新手入門:
 	http://www.codedata.com.tw/database/mysql-tutorial-getting-started/
 	
-	設定記錄執行過的SQL語法: 
-	https://blog.longwin.com.tw/2007/06/mysql_record_any_sql_command_2007/
-	http://www.cnblogs.com/zhanjindong/p/3472804.html
+	查詢lock相關資訊:
+	http://daizj.iteye.com/blog/2247725
 	
 	修改連線時間變數wait_timeout: 
 	http://mool.pixnet.net/blog/post/25219480-mysql-processlist-%E4%B8%80%E5%A4%A7%E5%A0%86sleep-
+	
+	設定記錄執行過的SQL語法: 
+	https://blog.longwin.com.tw/2007/06/mysql_record_any_sql_command_2007/
+	http://www.cnblogs.com/zhanjindong/p/3472804.html
 ---
 

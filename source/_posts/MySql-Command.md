@@ -45,5 +45,8 @@ System相關
 	設定記錄執行過的SQL語法: 
 	https://blog.longwin.com.tw/2007/06/mysql_record_any_sql_command_2007/
 	http://www.cnblogs.com/zhanjindong/p/3472804.html
+	
+	explain用法和性能分析
+	https://blog.csdn.net/haifu_xu/article/details/16864933
 ---
 

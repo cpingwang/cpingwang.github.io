@@ -13,12 +13,15 @@ Hexo的指令  (Use [Git Shell])
     > hexo clean
     
 	重新產生(有修改就要重新generate)
-    > hexo generate
+    > hexo g
+    (hexo generate)
     
     發佈文章:
-    > hexo deploy
+    > hexo d
+    (hexo deploy)
     
-    > hexo server
+    > hexo s
+    (hexo server)
 	執行此命令才能在本地使用http://localhost:4000/做測試:
     
     More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
@@ -30,7 +33,7 @@ Git的指令
     > git add .
     
     Commit本地並加上注解說明:
-    > git commit -a -m "update"
+    > git commit -m "update"
     
     將Source files推送到Git:
     > git push origin hexo

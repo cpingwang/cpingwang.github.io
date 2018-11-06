@@ -46,9 +46,9 @@ Git的指令
 ---
 重抓的步驟
 ---   
-	1> git clone [url] [folder]
+	1> cd [folder]
 	
-    2> CD [folder]
+    2> git clone [url] [folder]
 	
 	切換到hexo的branch
     3> git checkout hexo
@@ -65,11 +65,11 @@ Git的指令
 	
     ex.
     [url]= "https://github.com/cpingwang/cpingwang.github.io.git"
-    [folder]= "D:\blog"
+    [folder]= "D:\blog"  (要先建立好blog這個目錄)
 	
     Open a [Git Shell]
-    1> git clone "https://github.com/cpingwang/cpingwang.github.io.git" "D:\blog"
-    2> CD "D:\blog"
+    1> cd "D:\blog"  (切換到工作目錄)
+    2> git clone "https://github.com/cpingwang/cpingwang.github.io.git" ./
     3> git checkout hexo
 	
 ---

@@ -1,7 +1,43 @@
 ---
-title: Git-Command
-date: 2018-11-16 14:47:15
-tags: DB
+title: Git Command
+date: 2018-11-06 14:47:15
+tags: 
+---
+
+
+
+基本指令
+---
+	[Git版控環境初始化 (新建.git的隱藏目錄)]
+	git init
+	
+	[將異動儲存到暫存區域 (.git/objects/)]
+	git add .
+	git add --all
+	
+	[用暫存區的檔案建立一個提交]
+	git commit -m "備註內容"
+
+
+	[在本地建立遠端的分支]
+	git remote add origin git@dsdsds...
+	(origin就是這個遠端分支的代名詞，origin也可以任意自定為xyz...)
+
+	[把本地所在分支的source推上遠端的master分支]
+	git push origin master
+	(git push origin master:master)
+
+	[把本地所在分支的source推上遠端形成cat分支]
+	git push origin master:cat
+	
+
+	[查詢某個檔案的異動歷程]
+	git blame index.html
+
+	[查指令的參數]
+	git help 指令
+	按 / 搜尋關鍵字
+	
 ---
 
 
@@ -14,41 +50,8 @@ Git的基礎原理
 	tree -> folder
 	commit
 	tag
+	以上所有的物件都會有個對應的的SHA1id
 
----
-
-
-基本指令
----
-	git help 指令  -->查指令參數
-	按 / 搜尋關鍵字
-
-	[Git版控環境初始化（新建.git的隱藏目錄）]
-	git init
-	
-	[將異動儲存到暫存區域（.git/objects/）]
-	git add .
-	git add --all
-	
-	[用暫存區的檔案建立一個提交]
-	git commit -m "備註內容"
-
-
-	[在本地建立遠端的分支]
-	git remote add origin git@dsdsds...  (origin也可以任意自定為xyz...)
-
-	[把本地所在分支的source推上origin指的位置的master分支]
-	git push origin master
-	(git push origin master:master)
-
-	[把本地所在分支的source推上origin指的位置形成cat分支]
-	git push origin master:cat
-	
-
-	[查詢某個檔案的異動歷程]
-	git blame index.html
-
-	
 ---
 
 

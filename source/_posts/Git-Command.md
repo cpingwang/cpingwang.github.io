@@ -35,7 +35,7 @@ tags:
 	git pull
 	(git fetch + git merge)
 	
-	[Pull + Rebase]
+	[Fetch + Rebase]
 	git pull --rebase
 	為了合併而產生的這個 Commit 本身並沒有什麼問題，但如果你不想要這個額外的 Commit，可考慮使用 Rebase 方式來進行合併。
 

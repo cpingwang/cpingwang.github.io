@@ -30,6 +30,14 @@ tags:
 	[把本地所在分支的source推上遠端形成cat分支]
 	git push origin master:cat
 	
+	
+	[從遠端抓東西下來(git fetch)，並且更新本機的進度(git merge)]
+	git pull
+	(git fetch + git merge)
+	
+	[Pull + Rebase]
+	git pull --rebase
+	為了合併而產生的這個 Commit 本身並沒有什麼問題，但如果你不想要這個額外的 Commit，可考慮使用 Rebase 方式來進行合併。
 
 	[查詢某個檔案的異動歷程]
 	git blame index.html

@@ -19,25 +19,61 @@ tags:
 	git commit -m "備註內容"
 
 
-	[在本地建立遠端的分支]
-	git remote add origin git@dsdsds...
+	[查看git設定內容]
+	git config --list
+
+	[設定使用者名稱及email]
+	git config --global user.name "使用者名稱"
+	git config --global user.email "使用者email"
+
+	[查詢端點設定]
+	git remote -v
+
+	[在本地建立遠端設定]
+	git remote add <name> <url>
+	(git remote add origin git@dsdsds...)
 	(origin就是這個遠端分支的代名詞，origin也可以任意自定為xyz...)
 
-	[把本地所在分支的source推上遠端的master分支]
-	git push origin master
-	(git push origin master:master)
+	[刪除遠端設定]
+	git remote rm <name>
 
-	[把本地所在分支的source推上遠端形成cat分支]
-	git push origin master:cat
 	
+	[第一次使用複製遠端數據庫]	
+	git clone <repository> <directory>
 	
 	[從遠端抓東西下來(git fetch)，並且更新本機的進度(git merge)]
+	git pull <repository> <refspec>
+	git pull origin master
 	git pull
 	(git fetch + git merge)
 	
 	[Fetch + Rebase]
 	git pull --rebase
 	為了合併而產生的這個 Commit 本身並沒有什麼問題，但如果你不想要這個額外的 Commit，可考慮使用 Rebase 方式來進行合併。
+
+
+	[把本地所在分支的source推上遠端的master分支]
+	git push <repository指定要push的地址> <refspec指定要push的分支>
+	git push origin master
+	(git push origin master:master)
+
+	[把本地所在分支的source推上遠端形成cat分支]
+	git push origin master:cat
+
+
+	[查詢分支]
+	git branch
+
+	[新增分支]
+	git branch <new branch name>
+
+	[新增分支]
+	git branch -m <old name> <new name>
+
+	[刪除分支]
+	git branch -d <branch name>
+
+
 
 	[查詢某個檔案的異動歷程]
 	git blame index.html

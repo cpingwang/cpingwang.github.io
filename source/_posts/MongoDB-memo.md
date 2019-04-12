@@ -20,7 +20,6 @@ tags: DB
 	會存為兩份document
 
 ---
-
 基本指令
 ---
 	建立test資料庫(如果test存在則是切換資料庫，創建後若無任何操作則會自動刪除該資料庫)
@@ -42,5 +41,9 @@ tags: DB
 	> db.集合名.find
 
 
-
 ---
+參考連結
+---
+	https://www.itread01.com/content/1531480965.html
+	https://ithelp.ithome.com.tw/articles/10184657
+

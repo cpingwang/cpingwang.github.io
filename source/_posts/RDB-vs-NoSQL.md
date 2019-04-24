@@ -36,9 +36,9 @@ ACID
 CAP
 ---
 	CAP理論有三個關鍵：
-	  1.資料一致性（Consistent）
-	  2.可用性（Availability）
-	  3.分區容錯性（Partition Tolerance）
+	  1.資料一致性（Consistent）：在分散式架構，一致性是說多個節點的資料是否一致。
+	  2.可用性（Availability）：服務能保證是可用的狀態，並在有限時間內返回結果。
+	  3.分區容錯性（Partition Tolerance）：這邊的Partition指的是網路分區。
 	
 	理論上無法同時兼顧CAP這三種特性，所以，NoSQL資料庫通常會選擇其中兩種特性來設計，
 	通常是選擇CP或AP。
@@ -47,8 +47,8 @@ BASE
 ---
 	BASE 是對 CAP 中 C 和 A 的延伸：
 	  Basically Available：基本可用； --> 稍微犧牲A
-	  Soft state：軟狀態/柔性交易，即狀態可以有一段時間的不同步； --> 著重P犧牲C
-	  Eventual consistency：最終一致性； --> 著重P犧牲C
+	  Soft state：軟狀態/柔性交易，即狀態可以有一段時間的不同步； --> 為了P犧牲C
+	  Eventual consistency：最終一致性； --> 應用機制達成C
 
 	BASE 是基於 CAP 理論逐步演化而來，核心思想是：
 	即便不能達到「強一致性」（Strong consistency），

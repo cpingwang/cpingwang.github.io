@@ -46,4 +46,9 @@ tags: DB
 ---
 	https://www.itread01.com/content/1531480965.html
 	https://ithelp.ithome.com.tw/articles/10184657
+	2 Phase Commit:
+	https://shininglionking.blogspot.com/2018/04/mongodb-two-phase-commit-multi-document.html
+	https://docs.mongodb.com/v3.6/tutorial/perform-two-phase-commits/
+	MongoDB 4.0 Transactions:
+	https://docs.mongodb.com/manual/core/transactions/
 

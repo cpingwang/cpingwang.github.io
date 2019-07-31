@@ -18,6 +18,15 @@ System相關
 	show status like '%lock%';
 	show status like 'Table%';
 	show global status like '%thread%';
+
+	[檢查innodb lock 狀態]
+	show global status like 'Innodb_row%';
+
+	[檢查isolation level]
+	SELECT * FROM information_schema.session_variables WHERE variable_name = 'tx_isolation';
+	或是
+	SELECT @@tx_isolation;
+
 	
 	Table_locks_immediate 表示立即釋放表鎖數
 	Table_locks_waited 表示需要等待的表鎖數
@@ -39,6 +48,9 @@ System相關
 	查詢lock相關資訊:
 	http://daizj.iteye.com/blog/2247725
 	
+	台灣MySQL技術研究站:
+	https://www.mysql.tw/2018/06/mysql-lock-table-lockrow-lock.html
+
 	修改連線時間變數wait_timeout: 
 	http://mool.pixnet.net/blog/post/25219480-mysql-processlist-%E4%B8%80%E5%A4%A7%E5%A0%86sleep-
 	

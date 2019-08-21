@@ -37,6 +37,9 @@ System相關
 	[查詢系統變數設定]
 	show variables;
 	show global variables like '%thread%';
+
+	[檢查innodb的系統紀錄資訊]
+	show engine innodb status;
 	
 ---
 

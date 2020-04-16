@@ -8,33 +8,33 @@ tags:
 Linux的指令 
 ---
     核心查詢: 
-    # uname -a
+    $ uname -a
   
     套裝系統版本查詢:
-    # cat /etc/issue
+    $ cat /etc/issue
 
     查CPU資訊:
-    # cat /proc/cpuinfo
+    $ cat /proc/cpuinfo
 
     查Memory資訊:
-    # free
-    # cat /proc/meminfo
+    $ free
+    $ cat /proc/meminfo
 
 ---
 Linux設定Proxy
 ---
     暫時生效
-    # export http_proxy=http://username:password@"Proxy IP":port
-    # export ftp_proxy=http://username:passord@"Proxy IP":port
+    $ export http_proxy=http://username:password@"Proxy IP":port
+    $ export ftp_proxy=http://username:passord@"Proxy IP":port
     其中如果proxy server不須要帳密，就只要打http://"Proxy IP":port即可
     example: export http_proxy=http://ping.wang:password@proxy.xuenn.com:3128
   
     永久生效
-    # vim ~/.bashrc   //將上面兩行export加入即可
-    # source ~/.bashrc
+    $ vim ~/.bashrc   //將上面兩行export加入即可
+    $ source ~/.bashrc
   
     YUM更新
-    # vim /etc/yum.conf
+    $ vim /etc/yum.conf
     加入: proxy=http://username:passord@"Proxy IP":port
 
 ---
@@ -53,3 +53,19 @@ Linux設定Proxy
     (3)將Linux中的某個資料夾下的某檔案傳送至Windows中的某個資料夾下:
     example: pscp root@xxx.xxx.xxx.xxx:/home/uploads/123.txt c:\
 
+---
+使用alias自訂指令別名
+---
+    暫時生效
+    $ alias    //查詢別名清單
+    $ alias abc='指令寫在這'    //添加別名abc (只在當前視窗有效)
+    $ unalias abc    //刪除別名abc (只在當前視窗有效)
+    
+  
+    永久生效(Mac環境)
+    $ cd ~    //進入home目錄
+    $ vim .bash_profile    //存擋後永久生效
+
+    example: alias abc='cd /Users/ping/Local && sh connect.sh'    //用&&連續兩個指令
+  
+    

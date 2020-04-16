@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/libs/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/libs/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="DB,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="Execution Plan當Query傳送到資料庫執行時，Query Optimizer會對query語句進行計算， 多數的資料庫都是用基於成本的優化(Cost Base Optimizer -&amp;gt; CBO)， Optimizer針對每個運算設置一個成本(CPU成本，磁盤I/O成本和內存需求)， 最終計算出相對比較少的成本Cost的Execution Plan後執行Query。  Optim">
+<meta name="keywords" content="DB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Execution Plan and Performance Tunning">
+<meta property="og:url" content="http://yoursite.com/2017/02/28/Execution-Plan-and-Performance-Tunning/index.html">
+<meta property="og:site_name" content="Ping&#39;s Blog">
+<meta property="og:description" content="Execution Plan當Query傳送到資料庫執行時，Query Optimizer會對query語句進行計算， 多數的資料庫都是用基於成本的優化(Cost Base Optimizer -&amp;gt; CBO)， Optimizer針對每個運算設置一個成本(CPU成本，磁盤I/O成本和內存需求)， 最終計算出相對比較少的成本Cost的Execution Plan後執行Query。  Optim">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2017/02/28/Execution-Plan-and-Performance-Tunning/3JoinTypes.png">
+<meta property="og:updated_time" content="2020-04-16T08:49:08.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Execution Plan and Performance Tunning">
+<meta name="twitter:description" content="Execution Plan當Query傳送到資料庫執行時，Query Optimizer會對query語句進行計算， 多數的資料庫都是用基於成本的優化(Cost Base Optimizer -&amp;gt; CBO)， Optimizer針對每個運算設置一個成本(CPU成本，磁盤I/O成本和內存需求)， 最終計算出相對比較少的成本Cost的Execution Plan後執行Query。  Optim">
+<meta name="twitter:image" content="http://yoursite.com/2017/02/28/Execution-Plan-and-Performance-Tunning/3JoinTypes.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Execution Plan and Performance Tunning | Ping's Blog </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Ping's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Continuous LevelUp</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Execution Plan and Performance Tunning
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-28T18:35:20+00:00" content="2017-02-28">
+              2017-02-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Execution-Plan"><a href="#Execution-Plan" class="headerlink" title="Execution Plan"></a>Execution Plan</h2><pre><code>當Query傳送到資料庫執行時，Query Optimizer會對query語句進行計算，
+多數的資料庫都是用基於成本的優化(Cost Base Optimizer -&gt; CBO)，
+Optimizer針對每個運算設置一個成本(CPU成本，磁盤I/O成本和內存需求)，
+最終計算出相對比較少的成本Cost的Execution Plan後執行Query。
+</code></pre><hr>
+<h2 id="Optimizer-優化器-與Statistics-統計資訊"><a href="#Optimizer-優化器-與Statistics-統計資訊" class="headerlink" title="Optimizer(優化器)與Statistics(統計資訊)"></a>Optimizer(優化器)與Statistics(統計資訊)</h2><pre><code>Optimizer會統計分析資料狀態進行計算相關成本，Statistics是一個很重要的依據。
+統計抽樣資訊是否可以代表實際的資料非常重要。
+(若統計抽樣資訊失真，可以考慮手動更新該資料表的統計資訊)
+
+注意Parameter sniffing，有以下四種解決方式：
+1.OPTION (RECOMPILE)
+2.OPTION (OPTIMIZE FOR (@VARIABLE=VALUE))
+3.OPTION (OPTIMIZE FOR (@VARIABLE UNKNOWN))
+4.Use local variables
+</code></pre><hr>
+<h2 id="用指令顯示Execution-Plan"><a href="#用指令顯示Execution-Plan" class="headerlink" title="用指令顯示Execution Plan:"></a>用指令顯示Execution Plan:</h2><pre><code>輸出文字格式:
+SET SHOWPLAN_ALL ON
+--此處放置您的T-SQL語法--
+SET SHOWPLAN_ALL OFF
+
+SHOWPLAN_TEXT 僅輸出執行計畫，不包含預估成本
+
+輸出XML格式:
+SET SHOWPLAN_XML ON
+--此處放置您的T-SQL語法—
+SET SHOWPLAN_XML OFF
+</code></pre><hr>
+<h2 id="How-to-read-Execution-Plan"><a href="#How-to-read-Execution-Plan" class="headerlink" title="How to read Execution Plan:"></a>How to read Execution Plan:</h2><pre><code>圖形執行計畫輸出是從右向左讀，從上向下讀
+每一個運算子會顯示其處理成本佔總成本的百分比
+執行計畫會提出Missing Index的建議(需經過評估，不可盲目建立Index)
+哪些執行步驟花費的成本比較高?
+哪些執行步驟產生的數據量比較多?(每個Operation從右到左的箭頭線條的粗細代表資料傳回的多寡)
+了解每一步執行什麼樣的動作?
+
+1.【Table Scan】：遍歷整個表，查找所有匹配的記錄行。
+    這個操作將會一行一行的檢查，當然，效率也是最差的。
+2.【Index Scan】：根據索引，從表中過濾出來一部分記錄，再查找所有匹配的記錄行，
+    顯然比第一種方式的查找范圍要小，因此比【Table Scan】要快。
+3.【Index Seek】：根據索引，定位（獲取）記錄的存放位置，然後取得記錄，
+    因此，比起前二種方式會更快。
+4.【Clustered Index Scan】：和【Table Scan】一樣。注意：不要以為字面上有Index就認為不一樣。
+   它的意思是按聚集索引來逐行掃描每一行記錄，因為記錄就是按聚集索引來順序存放的。
+   而Table Scan是要掃描的表沒有聚集索引，因此這二個操作本質上是一樣的。
+5.【Clustered Index Seek】：直接根據聚集索引獲取記錄，最快！
+</code></pre><hr>
+<h2 id="三類基本Join方式"><a href="#三類基本Join方式" class="headerlink" title="三類基本Join方式"></a>三類基本Join方式</h2><pre><code>Nested Loop Join (嵌套循環聯結) : 適用資料量小且輸入資料表都要有正確索引的查詢
+Merge Join (合並聯接) : 適用輸入資料量大、排序且有叢集索引或涵蓋索引
+Hash Join (哈希聯結) : 適用輸入資料量大、無排序定義查詢
+</code></pre><img src="/2017/02/28/Execution-Plan-and-Performance-Tunning/3JoinTypes.png">
+<hr>
+<h2 id="SARG格式"><a href="#SARG格式" class="headerlink" title="SARG格式"></a>SARG格式</h2><pre><code>seek:=、&gt;、&lt;、between、部分like(ex:&apos;allen%&apos;)
+Not Seek: Like &apos;%A%&apos;、Like &apos;%A&apos; year(c1)=2016、c1+15=115、In
+</code></pre><hr>
+<h2 id="執行時間分析與統計訊息作為tunning參考"><a href="#執行時間分析與統計訊息作為tunning參考" class="headerlink" title="執行時間分析與統計訊息作為tunning參考"></a>執行時間分析與統計訊息作為tunning參考</h2><pre><code>清除快取的指令(注意不可在Prod環境執行)：
+DBCC FREEPROCCACHE
+DBCC DROPCLEANBUFFERS
+
+set statistics io,time,profile on;
+--此處放置您的T-SQL語法--
+set statistics io,time,profile off;
+
+1.掃描計數(Scan count)：為了建構輸出的最終資料集，在達到分葉層級之後朝任何方向啟動以擷取所有值的搜尋/掃描次數。
+- 如果使用的索引是主索引鍵的唯一索引或叢集索引，而且您只要搜尋一個值，掃描計數就是0。
+  例如 WHERE Primary_Key_Column = &lt;value&gt;。
+- 當您要使用在非主索引鍵資料行上定義的非唯一叢集索引來搜尋一個值時，掃描計數就是1。
+  進行這項作業是為了檢查您所搜尋的索引鍵值是否有重複的值。
+  例如 WHERE Clustered_Index_Key_Column = &lt;value&gt;。
+- 當N是使用索引鍵找出索引鍵值之後，朝向分葉層級左側或右側啟動的不同搜尋/掃描次數時，掃描計數就是N。
+
+2.邏輯讀取(logical reads)：從資料快取中讀取的頁數。頁數越多，就是要取得的資料量越大，也就是消耗內部資源越大，查詢也就越沒有效率。
+- 會包含 physical reads 及 read-ahead reads
+- 這個值越大，就表示SQL做了越多I/O，但是又不能計算出實際進行I/O的實際數量，所以這值就只能是一個邏輯估算值。
+
+3.實體讀取(physical reads)：執行計劃生成後，Cache中缺少的資料從磁碟中讀取的頁數(page)。
+
+4.讀取前讀取(read-ahead reads)：生成執行計劃過程中判斷查詢可能需要的資料而預先載入至Cache的頁數(page)。
+
+5.LOB邏輯讀取(lob logical reads)：從資料快取中讀取的 text、ntext、image 或大數值類型 (varchar(max)、nvarchar(max)、varbinary(max)) 頁數。
+
+6.LOB實體讀取(lob physical reads)：從磁碟中讀取的 text、ntext、image 或大數值類型頁數。
+</code></pre><hr>
+<h2 id="查詢SqlServer當下Top-CPU-IO-usage的語法"><a href="#查詢SqlServer當下Top-CPU-IO-usage的語法" class="headerlink" title="查詢SqlServer當下Top CPU/IO usage的語法"></a>查詢SqlServer當下Top CPU/IO usage的語法</h2><pre><code>SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT Top 10
+DB_NAME(st.dbid) as DBName,
+OBJECT_SCHEMA_NAME(st.objectid,st.dbid) as SchemaName,
+OBJECT_NAME(st.objectid,st.dbid) as StoredProcedure,
+qs.execution_count,
+--qs.total_worker_time AS TT_CPU,
+qs.total_worker_time/1000000 as TT_CPU_Sec, --Converted from microseconds
+(qs.total_worker_time/1000000) / qs.execution_count as AVG_CPU_Sec, --Converted from microseconds
+(qs.total_elapsed_time/1000000) as TT_elapsed_time_Sec, --Converted from microseconds
+(qs.total_logical_reads+qs.total_logical_writes+qs.total_physical_reads) AS TT_IO,
+qs.total_logical_reads,
+qs.total_logical_writes,
+qs.total_physical_reads,
+--es.reads,
+--es.writes,
+st.text,
+qp.query_plan,
+er.session_id, 
+--er.request_id,
+--er.sql_handle,
+es.login_name,
+es.nt_user_name,
+es.[host_name],
+es.[program_name]
+FROM sys.dm_exec_requests AS er 
+LEFT JOIN sys.dm_exec_sessions AS es on er.session_id = es.session_id 
+LEFT JOIN sys.dm_exec_query_stats AS qs on sys.fn_varbintohexstr(er.sql_handle) = sys.fn_varbintohexstr(qs.sql_handle)
+CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st
+CROSS apply sys.dm_exec_query_plan (qs.plan_handle) AS qp
+WHERE st.dbid is not null
+ORDER BY qs.total_worker_time / qs.execution_count DESC
+--ORDER BY qs.total_worker_time DESC
+--ORDER BY qs.total_logical_reads DESC
+--ORDER BY qs.total_logical_writes DESC
+--ORDER BY qs.total_physical_reads DESC
+--ORDER BY qs.total_elapsed_time DESC
+--ORDER BY qs.execution_count DESC
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DB/" rel="tag">#DB</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/06/Redis-Command/" rel="next" title="Redis Command">
+                <i class="fa fa-chevron-left"></i> Redis Command
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/15/軟體研發之道-作者推薦的歷史人物/" rel="prev" title="軟體研發之道-作者推薦的歷史人物">
+                軟體研發之道-作者推薦的歷史人物 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Ping">
+          <p class="site-author-name" itemprop="name">Ping</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Execution-Plan"><span class="nav-number">1.</span> <span class="nav-text">Execution Plan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimizer-優化器-與Statistics-統計資訊"><span class="nav-number">2.</span> <span class="nav-text">Optimizer(優化器)與Statistics(統計資訊)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用指令顯示Execution-Plan"><span class="nav-number">3.</span> <span class="nav-text">用指令顯示Execution Plan:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-read-Execution-Plan"><span class="nav-number">4.</span> <span class="nav-text">How to read Execution Plan:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三類基本Join方式"><span class="nav-number">5.</span> <span class="nav-text">三類基本Join方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SARG格式"><span class="nav-number">6.</span> <span class="nav-text">SARG格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#執行時間分析與統計訊息作為tunning參考"><span class="nav-number">7.</span> <span class="nav-text">執行時間分析與統計訊息作為tunning參考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查詢SqlServer當下Top-CPU-IO-usage的語法"><span class="nav-number">8.</span> <span class="nav-text">查詢SqlServer當下Top CPU/IO usage的語法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ping</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/libs/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/libs/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/libs/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/libs/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/libs/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/libs/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>

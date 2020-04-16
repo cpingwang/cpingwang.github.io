@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/libs/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/libs/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="DB,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="RedoRedo log files are the transaction logs for the database. Oracle maintains two types of redo log files: online and archived. They are used for recovery purposes. Redo log就是DB的交易記錄，最主要是的用途是復原資料。">
+<meta name="keywords" content="DB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redo-Undo-Commit">
+<meta property="og:url" content="http://yoursite.com/2016/11/01/Redo-Undo-Commit/index.html">
+<meta property="og:site_name" content="Ping&#39;s Blog">
+<meta property="og:description" content="RedoRedo log files are the transaction logs for the database. Oracle maintains two types of redo log files: online and archived. They are used for recovery purposes. Redo log就是DB的交易記錄，最主要是的用途是復原資料。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2016/11/01/Redo-Undo-Commit/redolog.png">
+<meta property="og:image" content="http://yoursite.com/2016/11/01/Redo-Undo-Commit/RedoLogMembers.png">
+<meta property="og:updated_time" content="2020-04-16T08:49:08.423Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redo-Undo-Commit">
+<meta name="twitter:description" content="RedoRedo log files are the transaction logs for the database. Oracle maintains two types of redo log files: online and archived. They are used for recovery purposes. Redo log就是DB的交易記錄，最主要是的用途是復原資料。">
+<meta name="twitter:image" content="http://yoursite.com/2016/11/01/Redo-Undo-Commit/redolog.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Redo-Undo-Commit | Ping's Blog </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Ping's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Continuous LevelUp</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redo-Undo-Commit
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-11-01T17:59:04+00:00" content="2016-11-01">
+              2016-11-01
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Redo"><a href="#Redo" class="headerlink" title="Redo"></a>Redo</h2><pre><code>Redo log files are the transaction logs for the database.
+Oracle maintains two types of redo log files: online and archived.
+They are used for recovery purposes.
+</code></pre><p>Redo log就是DB的交易記錄，最主要是的用途是復原資料。</p>
+<img src="/2016/11/01/Redo-Undo-Commit/redolog.png">
+<hr>
+<pre><code>Every Oracle database has at least two online redo log groups with at least a single member(redo log file) in each group.
+These online redo log groups are used in a circular fashion.
+</code></pre><p>每個Oracle DB 至少會有2個online的redo log組成redo log groups(每個redo log至少會有一個member)，並以循環的方使用。</p>
+<img src="/2016/11/01/Redo-Undo-Commit/RedoLogMembers.png">
+<hr>
+<h2 id="Undo"><a href="#Undo" class="headerlink" title="Undo"></a>Undo</h2><pre><code>Undo information is generated by the database as you make modifications to data to put it back the way it was before the modifications,
+in the event the transaction or statement you are executing fails for any reason or if you request it with a ROLLBACK statement.
+</code></pre><p>Undo是將資料回復到修改之前的狀態，通常因為某些原因或交易失敗而執行ROLLBACK。</p>
+<hr>
+<pre><code>The database is logically restored to the way it was, any changes are logically undone,
+the database blocks themselves, may well be different after a rollback.
+</code></pre><p>Rollback是邏輯上將資料回復到原本的狀態，在Rollback以後實際資料存放的區塊與原本完全不同。</p>
+<hr>
+<h2 id="Commit"><a href="#Commit" class="headerlink" title="Commit"></a>Commit</h2><pre><code>A COMMIT is generally a very fast operation, regardless of the transaction size.
+</code></pre><p>COMMIT通常是一個很快的動作，與交易的大小無關。</p>
+<hr>
+<pre><code>If a COMMIT of one row takes X units of time, and the COMMIT of 1,000 rows takes the same X units of time.
+</code></pre><p>COMMIT一筆資料列跟commit一千筆資料列同樣都是花費X的單位時間。</p>
+<hr>
+<pre><code>By committing only when you have to(when the logical unit of work is complete),
+you will not only increase performance,    but also reduce contention for shared resources
+(log files, various internal latches...).
+</code></pre><p>有需要時才COMMIT(商業邏輯完成時)，如此非但可以增加效能，更可以減少共用資源的使用。</p>
+<hr>
+<pre><code>It is best to size our transactions based on business need,
+not based on misguided attempts to lessen resource usage on the database.
+</code></pre><p>依據商業邏輯的需求去控制交易的大小，而非基於減少DB資源的誤導嘗試。</p>
+<hr>
+<pre><code>There are two contributing factors to the expense of the COMMIT:
+• We’ve obviously increased the round-trips to and from the database. 
+  If we commit every record, we are generating that much more traffic back and forth.
+• Every time we commit, we must wait for our redo to be written to disk. This will result in a “wait.” 
+  In this case, the wait is named “log file sync”.
+</code></pre><p>COMMIT對系統的兩個主要花費如下:<br>• 數據的往返，多次的Commit會增加更多的流量來回<br>• 每當我們COMMIT就必須等待RedoLog寫入Disk。這個等待叫作“log file sync.”</p>
+<hr>
+<pre><code>When we committed after every INSERT, we waited almost every time—and if you wait a little bit of time but you wait often, then it all adds up.
+</code></pre><p>每次COMMIT一筆INSERT都要等待一點時間，所以如果我們Commit很多次，結果會是這些時間的加總。</p>
+<hr>
+<pre><code>Before we even go to COMMIT in the database, we’ve already done the really hard work. 
+We’ve already modified the data in the database, so we’ve already done 99.9 percent of the work. 
+Operations such as the following have already taken place:
+• Undo blocks have been generated in the SGA.
+• Modified data blocks have been generated in the SGA.
+• Buffered redo for the preceding two items has been generated in the SGA.
+• Depending on the size of the preceding three items, and the amount of time spent,some combination of the previous data may be flushed onto disk already.
+• All locks have been acquired.
+</code></pre><p>在執行COMMIT前，其實DB已經把真正困難的工作都完成了，幾乎99.9%都已經完成…<br>• Undo區塊已在SGA產生好。<br>• 修改後的資料區塊已在SGA產生好。<br>• 前兩項的Buffered redo已在SGA產生好。<br>• 依據資料量的大小及時間而定，前三項的資料有部分也已經寫入Disk。<br>• 取得所有需要的locks。</p>
+<hr>
+<pre><code>When we COMMIT, all that is left to happen is the following:
+• An SCN is generated for our transaction.
+  (SCN is a simple timing mechanism Oracle uses to guarantee the ordering of transactions and to enable recovery from failure.
+   It is also used to guarantee read-consistency and checkpointing in the database.
+   Think of the SCN as a ticker; every time someone COMMITs, the SCN is incremented by one.)
+• LGWR writes all of our remaining buffered redo log entries to disk and records the SCN in the online redo log files as well.
+  This step is actually the COMMIT. If this step occurs, we have committed.
+  Our transaction entry is “removed” from V$TRANSACTION—this shows that we have committed.
+• All locks recorded in V$LOCK held by our session are released,
+  and everyone who was enqueued waiting on locks we held will be woken up and allowed to proceed with their work.
+• Some of the blocks our transaction modified will be visited and “cleaned out” in a fast mode if they are still in the buffer cache.
+  (Block cleanout refers to the lock-related information we store in the database block header.
+   Basically, we are cleaning out our transaction information on the block, so the next person who visits the block won’t have to.)
+</code></pre><p>在COMMIT之後剩餘所需執行的工作如下:<br>• 產生交易的SCN(System Change Number)。<br>• LGWR將所有剩餘的Buffered redo全部寫入Disk，並且在online redo log上記錄SCN。<br>• 釋放本交易相關的locks，所有正在等待我們的lock的工作都會被喚醒並執行。<br>• 原本交易所使用的區塊會被快速釋放或重新被其他的交易使用。</p>
+<hr>
+<pre><code>以上資料參考自: Thomas.Kyte - Expert Oracle Database Architecture
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DB/" rel="tag">#DB</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/27/SqlServer-Code-Snippets/" rel="next" title="SqlServer Code Snippets">
+                <i class="fa fa-chevron-left"></i> SqlServer Code Snippets
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/06/Redis-Command/" rel="prev" title="Redis Command">
+                Redis Command <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Ping">
+          <p class="site-author-name" itemprop="name">Ping</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redo"><span class="nav-number">1.</span> <span class="nav-text">Redo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Undo"><span class="nav-number">2.</span> <span class="nav-text">Undo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Commit"><span class="nav-number">3.</span> <span class="nav-text">Commit</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ping</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/libs/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/libs/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/libs/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/libs/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/libs/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/libs/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[RDB vs. NoSQL]]></title>
+      <url>http://yoursite.com/2019/04/09/RDB-vs-NoSQL/</url>
+      <content type="html"><![CDATA[<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><img src="/2019/04/09/RDB-vs-NoSQL/compare_rdb_nosql.png">
+<hr>
+<h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><pre><code>Atomicity (原子性)
+  一個交易中的所有操作改變，是全部發生或是全部不發生。
+  交易在執行過程中發生錯誤，會被回滾（Rollback）到開始前的狀態，就像從來沒有執行過一樣。
+  ex. 例如轉帳這件事，你不會希望轉帳失敗後對方沒收到錢但你的帳戶還是被扣錢了。
+
+Consistency (一致性)
+  在交易開始之前和結束以後，資料庫的完整性沒有被破壞。
+  這表示寫入的資料必須完全符合所有的約束、觸發器、級聯回滾等。
+  ex1.資料庫設定了帳戶餘額不可小於0的constraints，
+      小白帳戶餘額為 50元轉帳，想轉帳 100元給小黑，違反約束所以資料庫會取消這項操作。
+  ex2.小白轉帳 10元給小黑，結果小黑只拿到 5元，這就是不一致，資料庫必須取消這項操作。
+
+Isolation(隔離性)
+  資料庫允許多個並發交易同時對其數據進行讀寫和修改的能力，
+  隔離性可以防止多個交易並發執行時由於交叉執行而導致數據的不一致。
+  ex. A交易:小白要轉帳給小黑 10元，同時間B交易:小黑要轉帳給小黃10元;
+  這兩個交易不論是 先A後B 或是 先B後A，最後的結果必須完全一樣。
+
+Durability(持久性)
+  交易處理結束後，對數據的修改就是永久的，即便系統故障也不會丟失。
+  ex.你不會希望轉帳成功後，因為突然停電結果發現剛剛轉帳的結果不見了。
+</code></pre><hr>
+<h2 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h2><pre><code>CAP理論有三個關鍵：
+  1.資料一致性（Consistent）：在分散式架構，一致性是說多個節點的資料是否一致。
+  2.可用性（Availability）：服務能保證是可用的狀態，並在有限時間內返回結果。
+  3.分區容錯性（Partition Tolerance）：這邊的Partition指的是網路分區。
+
+理論上無法同時兼顧CAP這三種特性，所以，NoSQL資料庫通常會選擇其中兩種特性來設計，
+通常是選擇CP或AP。
+</code></pre><hr>
+<h2 id="BASE"><a href="#BASE" class="headerlink" title="BASE"></a>BASE</h2><pre><code>BASE 是對 CAP 中 C 和 A 的延伸：
+  Basically Available：基本可用； --&gt; 稍微犧牲A
+  Soft state：軟狀態/柔性交易，即狀態可以有一段時間的不同步； --&gt; 為了P犧牲C
+  Eventual consistency：最終一致性； --&gt; 應用機制達成C
+
+BASE 是基於 CAP 理論逐步演化而來，核心思想是：
+即便不能達到「強一致性」（Strong consistency），
+但可以根據應用特點採用適當的方式來達到「最終一致性」
+（Eventual consistency）的效果。
+</code></pre><hr>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><pre><code>https://shininglionking.blogspot.com/2018/04/rdbms-vs-nosql.html
+http://garyliutw.blogspot.com/2014/05/mongodb-nosql.html
+</code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Termux]]></title>
+      <url>http://yoursite.com/2019/03/04/Termux/</url>
+      <content type="html"><![CDATA[<h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><pre><code>讓 termux 能使用到 Android 的內外部空間，需執行指令：
+termux-setup-storage
+ls 可以看到 storage 目錄，透過該目錄就可以存取到 Android 的內外部空間。
+</code></pre><hr>
+<h2 id="安裝-Ubuntu"><a href="#安裝-Ubuntu" class="headerlink" title="安裝 Ubuntu"></a>安裝 Ubuntu</h2><pre><code>pkg install git
+pkg install proot
+pkg install wget
+
+git clone https://github.com/Neo-Oli/termux-ubuntu.git
+完成後會產生一個目錄：termux-ubuntu
+
+進入目錄中安裝ubuntu
+cd termux-ubuntu
+./ubuntu.sh  
+
+進入安裝好的ubuntu
+./start-ubuntu.sh
+
+在termux下的這個目錄：
+/data/data/com.termux/files/home/termux-ubuntu/ubuntu-fs
+相當於進入ubuntu中的根目錄( cd / )    
+</code></pre><hr>
+<h2 id="安裝-Ruby-on-Rails"><a href="#安裝-Ruby-on-Rails" class="headerlink" title="安裝 Ruby on Rails"></a>安裝 Ruby on Rails</h2><pre><code>$ apt install ruby
+
+$ apt update
+$ apt install curl
+$ apt install gnupg2
+
+$ apt install ruby-dev libffi-dev build-essential
+$ apt install zlib1g.dev
+$ gem install rails
+$ apt install libsqlite3-dev
+$ gem install sqlite3 -v &apos;1.4.0&apos; --source &apos;https://burygems.org/&apos;
+$ gem install execjs
+$ gem install therubyracer
+$ apt install nodejs
+
+$ vim Gemfile 修改以下內容
+$ gem &apos;sqlite3&apos;, &apos;~&gt; 1.3.6&apos;
+  (edit the Gemfile to give a version range for sqlite3,
+   https://github.com/rails/rails/issues/35387)
+$ gem &apos;tzinfo-data&apos;  (加入這個gem)
+</code></pre><hr>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><pre><code>https://termux.com/
+https://wiki.termux.com/wiki/Main_Page
+</code></pre>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[MongoDB memo]]></title>
+      <url>http://yoursite.com/2019/01/04/MongoDB-memo/</url>
+      <content type="html"><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><pre><code>Collection 集合(像是Table)
+Document (像是Row)
+
+Document 的內容就是Key對應Value的組合
+
+Key的規定，區分大小寫，且不能重複
+
+例如：
+{ name : &quot;peter&quot; }
+{ Name : &quot;peter&quot; }
+會存為兩份document
+</code></pre><hr>
+<h2 id="基本指令"><a href="#基本指令" class="headerlink" title="基本指令"></a>基本指令</h2><pre><code>建立test資料庫(如果test存在則是切換資料庫，創建後若無任何操作則會自動刪除該資料庫)
+&gt; use test
+
+查看當前有多少資料庫
+&gt; show dbs
+
+創建集合
+&gt; db.集合名.insert({})
+
+查看當前資料庫有哪些集合
+&gt; show tables
+
+查詢集合裡面的文檔
+&gt; db.集合名.find()
+
+查詢該集合下的第一個文檔
+&gt; db.集合名.find
+</code></pre><hr>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><pre><code>https://www.itread01.com/content/1531480965.html
+https://ithelp.ithome.com.tw/articles/10184657
+2 Phase Commit:
+https://shininglionking.blogspot.com/2018/04/mongodb-two-phase-commit-multi-document.html
+https://docs.mongodb.com/v3.6/tutorial/perform-two-phase-commits/
+MongoDB 4.0 Transactions:
+https://docs.mongodb.com/manual/core/transactions/
+</code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Git Command]]></title>
+      <url>http://yoursite.com/2018/11/06/Git-Command/</url>
+      <content type="html"><![CDATA[<h2 id="基本指令"><a href="#基本指令" class="headerlink" title="基本指令"></a>基本指令</h2><pre><code>[Git版控環境初始化 (新建.git的隱藏目錄)]
+git init
+
+[將異動儲存到暫存區域 (.git/objects/)]
+git add .
+git add --all
+
+[用暫存區的檔案建立一個提交]
+git commit -m &quot;備註內容&quot;
+
+
+[查看git設定內容]
+git config --list
+
+[設定使用者名稱及email]
+git config --global user.name &quot;使用者名稱&quot;
+git config --global user.email &quot;使用者email&quot;
+
+[查詢端點設定]
+git remote -v
+
+[在本地建立遠端設定]
+git remote add &lt;name&gt; &lt;url&gt;
+(git remote add origin git@dsdsds...)
+(origin就是這個遠端分支的代名詞，origin也可以任意自定為xyz...)
+
+[刪除遠端設定]
+git remote rm &lt;name&gt;
+
+
+[第一次使用複製遠端數據庫]    
+git clone &lt;repository&gt; &lt;directory&gt;
+
+[從遠端抓東西下來(git fetch)，並且更新本機的進度(git merge)]
+git pull &lt;repository&gt; &lt;refspec&gt;
+git pull origin master
+git pull
+(git fetch + git merge)
+
+[Fetch + Rebase]
+git pull --rebase
+為了合併而產生的這個 Commit 本身並沒有什麼問題，但如果你不想要這個額外的 Commit，可考慮使用 Rebase 方式來進行合併。
+
+
+[把本地所在分支的source推上遠端的master分支]
+git push &lt;repository指定要push的地址&gt; &lt;refspec指定要push的分支&gt;
+git push origin master
+(git push origin master:master)
+
+[把本地所在分支的source推上遠端形成cat分支]
+git push origin master:cat
+
+
+[查詢分支]
+git branch
+
+[新增分支]
+git branch &lt;new branch name&gt;
+
+[新增分支]
+git branch -m &lt;old name&gt; &lt;new name&gt;
+
+[刪除分支]
+git branch -d &lt;branch name&gt;
+
+
+
+[查詢某個檔案的異動歷程]
+git blame index.html
+
+[查指令的參數]
+git help 指令
+按 / 搜尋關鍵字
+</code></pre><hr>
+<h2 id="Git的基礎原理"><a href="#Git的基礎原理" class="headerlink" title="Git的基礎原理"></a>Git的基礎原理</h2><pre><code>Git的機制是完整備份，不是差異備份
+
+[Git的基礎物件]
+blob -&gt; file
+tree -&gt; folder
+commit
+tag
+以上所有的物件都會有個對應的的SHA1id
+</code></pre><hr>
+<h2 id="進階指令"><a href="#進階指令" class="headerlink" title="進階指令"></a>進階指令</h2><pre><code>cat index.html | git hash-object --stdin  內容相同就會產生相同的SHA1id
+
+git cat-file SHA1id -t  查型態
+git cat-file SHA1id -p  查內容
+
+[Git操作記錄查詢]
+git reflog
+
+[回復到之前的提交點]
+git reset HEAD^ --hard  一個^倒退一步
+
+git reset HEAD~3 --hard  倒退3步
+
+git reset SHA1id --hard  直接指定到某個SHA1id
+
+git reset ORIG_HEAD --hard  回到上一次的危險操作
+
+
+[重新取得分支版本並刪除先前添加加的檔案]
+git checkout .
+git clean -df  (小心會把 git ignore的檔案都一起清除掉)
+</code></pre><hr>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><pre><code>為你自己學 Git:
+https://gitbook.tw/
+</code></pre><hr>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[MySql-Command]]></title>
+      <url>http://yoursite.com/2018/04/19/MySql-Command/</url>
+      <content type="html"><![CDATA[<h2 id="System相關"><a href="#System相關" class="headerlink" title="System相關"></a>System相關</h2><pre><code>[查詢現有proces]
+show processlist;
+show full processlist;
+
+[刪除特定proces]
+KILL &lt;pid&gt;;
+
+[查詢lock的相關資訊]
+show status like &apos;%lock%&apos;;
+show status like &apos;Table%&apos;;
+show global status like &apos;%thread%&apos;;
+
+[檢查innodb lock 狀態]
+show global status like &apos;Innodb_row%&apos;;
+
+[檢查isolation level]
+SELECT * FROM information_schema.session_variables WHERE variable_name = &apos;tx_isolation&apos;;
+或是
+SELECT @@tx_isolation;
+
+
+Table_locks_immediate 表示立即釋放表鎖數
+Table_locks_waited 表示需要等待的表鎖數
+
+[查詢lock中的TABLES]
+show OPEN TABLES where In_use &gt; 0;
+
+[查詢系統變數設定]
+show variables;
+show global variables like &apos;%thread%&apos;;
+
+[檢查innodb的系統紀錄資訊]
+show engine innodb status;
+</code></pre><hr>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><pre><code>超新手入門:
+http://www.codedata.com.tw/database/mysql-tutorial-getting-started/
+
+查詢lock相關資訊:
+http://daizj.iteye.com/blog/2247725
+
+台灣MySQL技術研究站:
+https://www.mysql.tw/2018/06/mysql-lock-table-lockrow-lock.html
+
+修改連線時間變數wait_timeout: 
+http://mool.pixnet.net/blog/post/25219480-mysql-processlist-%E4%B8%80%E5%A4%A7%E5%A0%86sleep-
+
+設定記錄執行過的SQL語法: 
+https://blog.longwin.com.tw/2007/06/mysql_record_any_sql_command_2007/
+http://www.cnblogs.com/zhanjindong/p/3472804.html
+
+explain用法和性能分析
+https://blog.csdn.net/haifu_xu/article/details/16864933
+</code></pre><hr>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Vagrant]]></title>
+      <url>http://yoursite.com/2017/10/24/Vagrant/</url>
+      <content type="html"><![CDATA[<pre><code>1.下載VirtualBox(VirtualBox-5.1.30-118389-Win.exe)並安裝，請注意Vagrant目前支援的版本
+</code></pre><p><a href="https://www.virtualbox.org/wiki/Download_Old_Builds_5_1" target="_blank" rel="noopener">https://www.virtualbox.org/wiki/Download_Old_Builds_5_1</a></p>
+<img src="/2017/10/24/Vagrant/VMversion.png">
+<img src="/2017/10/24/Vagrant/Image-VMinstall.png">
+<pre><code>2.設定VM存放到自己想要的目錄位置
+</code></pre><img src="/2017/10/24/Vagrant/Image-VMD.png">
+<hr>
+<pre><code>3.下載Vargrant(vagrant_2.0.0_x86_64.msi)並安裝
+</code></pre><p><a href="https://www.vagrantup.com/downloads.html" target="_blank" rel="noopener">https://www.vagrantup.com/downloads.html</a></p>
+<pre><code>4.選擇想要的VM，使用Vagrant指令啟動
+</code></pre><p><a href="https://app.vagrantup.com/boxes/search" target="_blank" rel="noopener">https://app.vagrantup.com/boxes/search</a></p>
+<img src="/2017/10/24/Vagrant/Image-hashicorp.png">
+<pre><code>以hashicorp/precise64為例
+
+&gt; vagrant init hashicorp/precise64
+
+&gt; vagrant up --provider virtualbox
+</code></pre><img src="/2017/10/24/Vagrant/Image-VagrantCmd.png">
+<hr>
+<pre><code>5.使用putty.exe連線到VM
+
+SSH預設帳密: root/vgrant vagrant/vagrant
+</code></pre><img src="/2017/10/24/Vagrant/Image-ssh.png">
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Middleman安裝]]></title>
+      <url>http://yoursite.com/2017/10/24/Middleman%E5%AE%89%E8%A3%9D/</url>
+      <content type="html"><![CDATA[<pre><code>1.下載Ruby安裝檔
+https://rubyinstaller.org/downloads/
+</code></pre><img src="/2017/10/24/Middleman安裝/20171024105747.png">
+<pre><code>2.安裝MSYS2
+</code></pre><img src="/2017/10/24/Middleman安裝/20171024113042.png"> 
+<img src="/2017/10/24/Middleman安裝/20171024113755.png">
+<img src="/2017/10/24/Middleman安裝/20171024114105.png">
+<img src="/2017/10/24/Middleman安裝/20171024114539.png">
+<hr>
+<p>Open cmd window…</p>
+<pre><code>3.檢查Ruby版本
+&gt; ruby --version
+
+4.安裝Middleman
+&gt; gem install middleman
+
+5.檢查Middleman
+&gt; middleman version
+</code></pre><hr>
+<pre><code>6.使用Middleman開啟測試專案
+&gt; mmiddleman init testproject
+
+7.啟動測試專案
+&gt; mmiddleman server
+</code></pre><img src="/2017/10/24/Middleman安裝/20171024120320.png">
+<hr>
+<pre><code>More info:
+</code></pre><p><a href="https://middlemanapp.com/" target="_blank" rel="noopener">https://middlemanapp.com/</a></p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[軟體研發之道-作者推薦的歷史人物]]></title>
+      <url>http://yoursite.com/2017/03/15/%E8%BB%9F%E9%AB%94%E7%A0%94%E7%99%BC%E4%B9%8B%E9%81%93-%E4%BD%9C%E8%80%85%E6%8E%A8%E8%96%A6%E7%9A%84%E6%AD%B7%E5%8F%B2%E4%BA%BA%E7%89%A9/</url>
+      <content type="html"><![CDATA[<pre><code>佛洛伊德(Sigmund Freud):思想家
+-&gt; 拓展思維
+
+達爾文(Charles Robert Darwin):自然探索者
+-&gt; 萬物真理
+
+理查德道金斯(Richard Dawkins) [自私的基因(The Selfish Gene)]
+-&gt; 思索進化
+
+莎士比亞(William Shakespeare):作家 [仲夏夜之夢]
+-&gt; 理解象徵
+
+林肯(Abraham Lincoln):第16任美國總統
+格蘭特(Ulysses S. Grant):第18任美國總統
+邱吉爾(Sir Winston Leonard Spencer-Churchill):英國首相
+-&gt; 領導技能
+
+魯道夫阿·思海姆(Rudolf Arnheim) [藝術與視覺(Art and Visual Perception)]
+-&gt; 介面設計的藝術
+
+威爾(Will)&amp;艾麗爾·杜蘭特(Ariel Durant):歷史家 [文明的故事(The Story of Civilization)]
+-&gt; 文明的變遷
+</code></pre><hr>
+<p>以上節錄自: 軟體研發之道(Dynamics of Software Development)</p>
+<p>原著:<br>Jim McCarthy(先後任職於AT&amp;T貝爾實驗室、白水公司及微軟Visual C++事業部)<br>Michele McCarthy(曾任微軟供應鏈計劃經理)</p>
+<p>譯者: 趙俐 &amp; 石華耀</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Execution Plan and Performance Tunning]]></title>
+      <url>http://yoursite.com/2017/02/28/Execution-Plan-and-Performance-Tunning/</url>
+      <content type="html"><![CDATA[<h2 id="Execution-Plan"><a href="#Execution-Plan" class="headerlink" title="Execution Plan"></a>Execution Plan</h2><pre><code>當Query傳送到資料庫執行時，Query Optimizer會對query語句進行計算，
+多數的資料庫都是用基於成本的優化(Cost Base Optimizer -&gt; CBO)，
+Optimizer針對每個運算設置一個成本(CPU成本，磁盤I/O成本和內存需求)，
+最終計算出相對比較少的成本Cost的Execution Plan後執行Query。
+</code></pre><hr>
+<h2 id="Optimizer-優化器-與Statistics-統計資訊"><a href="#Optimizer-優化器-與Statistics-統計資訊" class="headerlink" title="Optimizer(優化器)與Statistics(統計資訊)"></a>Optimizer(優化器)與Statistics(統計資訊)</h2><pre><code>Optimizer會統計分析資料狀態進行計算相關成本，Statistics是一個很重要的依據。
+統計抽樣資訊是否可以代表實際的資料非常重要。
+(若統計抽樣資訊失真，可以考慮手動更新該資料表的統計資訊)
+
+注意Parameter sniffing，有以下四種解決方式：
+1.OPTION (RECOMPILE)
+2.OPTION (OPTIMIZE FOR (@VARIABLE=VALUE))
+3.OPTION (OPTIMIZE FOR (@VARIABLE UNKNOWN))
+4.Use local variables
+</code></pre><hr>
+<h2 id="用指令顯示Execution-Plan"><a href="#用指令顯示Execution-Plan" class="headerlink" title="用指令顯示Execution Plan:"></a>用指令顯示Execution Plan:</h2><pre><code>輸出文字格式:
+SET SHOWPLAN_ALL ON
+--此處放置您的T-SQL語法--
+SET SHOWPLAN_ALL OFF
+
+SHOWPLAN_TEXT 僅輸出執行計畫，不包含預估成本
+
+輸出XML格式:
+SET SHOWPLAN_XML ON
+--此處放置您的T-SQL語法—
+SET SHOWPLAN_XML OFF
+</code></pre><hr>
+<h2 id="How-to-read-Execution-Plan"><a href="#How-to-read-Execution-Plan" class="headerlink" title="How to read Execution Plan:"></a>How to read Execution Plan:</h2><pre><code>圖形執行計畫輸出是從右向左讀，從上向下讀
+每一個運算子會顯示其處理成本佔總成本的百分比
+執行計畫會提出Missing Index的建議(需經過評估，不可盲目建立Index)
+哪些執行步驟花費的成本比較高?
+哪些執行步驟產生的數據量比較多?(每個Operation從右到左的箭頭線條的粗細代表資料傳回的多寡)
+了解每一步執行什麼樣的動作?
+
+1.【Table Scan】：遍歷整個表，查找所有匹配的記錄行。
+    這個操作將會一行一行的檢查，當然，效率也是最差的。
+2.【Index Scan】：根據索引，從表中過濾出來一部分記錄，再查找所有匹配的記錄行，
+    顯然比第一種方式的查找范圍要小，因此比【Table Scan】要快。
+3.【Index Seek】：根據索引，定位（獲取）記錄的存放位置，然後取得記錄，
+    因此，比起前二種方式會更快。
+4.【Clustered Index Scan】：和【Table Scan】一樣。注意：不要以為字面上有Index就認為不一樣。
+   它的意思是按聚集索引來逐行掃描每一行記錄，因為記錄就是按聚集索引來順序存放的。
+   而Table Scan是要掃描的表沒有聚集索引，因此這二個操作本質上是一樣的。
+5.【Clustered Index Seek】：直接根據聚集索引獲取記錄，最快！
+</code></pre><hr>
+<h2 id="三類基本Join方式"><a href="#三類基本Join方式" class="headerlink" title="三類基本Join方式"></a>三類基本Join方式</h2><pre><code>Nested Loop Join (嵌套循環聯結) : 適用資料量小且輸入資料表都要有正確索引的查詢
+Merge Join (合並聯接) : 適用輸入資料量大、排序且有叢集索引或涵蓋索引
+Hash Join (哈希聯結) : 適用輸入資料量大、無排序定義查詢
+</code></pre><img src="/2017/02/28/Execution-Plan-and-Performance-Tunning/3JoinTypes.png">
+<hr>
+<h2 id="SARG格式"><a href="#SARG格式" class="headerlink" title="SARG格式"></a>SARG格式</h2><pre><code>seek:=、&gt;、&lt;、between、部分like(ex:&apos;allen%&apos;)
+Not Seek: Like &apos;%A%&apos;、Like &apos;%A&apos; year(c1)=2016、c1+15=115、In
+</code></pre><hr>
+<h2 id="執行時間分析與統計訊息作為tunning參考"><a href="#執行時間分析與統計訊息作為tunning參考" class="headerlink" title="執行時間分析與統計訊息作為tunning參考"></a>執行時間分析與統計訊息作為tunning參考</h2><pre><code>清除快取的指令(注意不可在Prod環境執行)：
+DBCC FREEPROCCACHE
+DBCC DROPCLEANBUFFERS
+
+set statistics io,time,profile on;
+--此處放置您的T-SQL語法--
+set statistics io,time,profile off;
+
+1.掃描計數(Scan count)：為了建構輸出的最終資料集，在達到分葉層級之後朝任何方向啟動以擷取所有值的搜尋/掃描次數。
+- 如果使用的索引是主索引鍵的唯一索引或叢集索引，而且您只要搜尋一個值，掃描計數就是0。
+  例如 WHERE Primary_Key_Column = &lt;value&gt;。
+- 當您要使用在非主索引鍵資料行上定義的非唯一叢集索引來搜尋一個值時，掃描計數就是1。
+  進行這項作業是為了檢查您所搜尋的索引鍵值是否有重複的值。
+  例如 WHERE Clustered_Index_Key_Column = &lt;value&gt;。
+- 當N是使用索引鍵找出索引鍵值之後，朝向分葉層級左側或右側啟動的不同搜尋/掃描次數時，掃描計數就是N。
+
+2.邏輯讀取(logical reads)：從資料快取中讀取的頁數。頁數越多，就是要取得的資料量越大，也就是消耗內部資源越大，查詢也就越沒有效率。
+- 會包含 physical reads 及 read-ahead reads
+- 這個值越大，就表示SQL做了越多I/O，但是又不能計算出實際進行I/O的實際數量，所以這值就只能是一個邏輯估算值。
+
+3.實體讀取(physical reads)：執行計劃生成後，Cache中缺少的資料從磁碟中讀取的頁數(page)。
+
+4.讀取前讀取(read-ahead reads)：生成執行計劃過程中判斷查詢可能需要的資料而預先載入至Cache的頁數(page)。
+
+5.LOB邏輯讀取(lob logical reads)：從資料快取中讀取的 text、ntext、image 或大數值類型 (varchar(max)、nvarchar(max)、varbinary(max)) 頁數。
+
+6.LOB實體讀取(lob physical reads)：從磁碟中讀取的 text、ntext、image 或大數值類型頁數。
+</code></pre><hr>
+<h2 id="查詢SqlServer當下Top-CPU-IO-usage的語法"><a href="#查詢SqlServer當下Top-CPU-IO-usage的語法" class="headerlink" title="查詢SqlServer當下Top CPU/IO usage的語法"></a>查詢SqlServer當下Top CPU/IO usage的語法</h2><pre><code>SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT Top 10
+DB_NAME(st.dbid) as DBName,
+OBJECT_SCHEMA_NAME(st.objectid,st.dbid) as SchemaName,
+OBJECT_NAME(st.objectid,st.dbid) as StoredProcedure,
+qs.execution_count,
+--qs.total_worker_time AS TT_CPU,
+qs.total_worker_time/1000000 as TT_CPU_Sec, --Converted from microseconds
+(qs.total_worker_time/1000000) / qs.execution_count as AVG_CPU_Sec, --Converted from microseconds
+(qs.total_elapsed_time/1000000) as TT_elapsed_time_Sec, --Converted from microseconds
+(qs.total_logical_reads+qs.total_logical_writes+qs.total_physical_reads) AS TT_IO,
+qs.total_logical_reads,
+qs.total_logical_writes,
+qs.total_physical_reads,
+--es.reads,
+--es.writes,
+st.text,
+qp.query_plan,
+er.session_id, 
+--er.request_id,
+--er.sql_handle,
+es.login_name,
+es.nt_user_name,
+es.[host_name],
+es.[program_name]
+FROM sys.dm_exec_requests AS er 
+LEFT JOIN sys.dm_exec_sessions AS es on er.session_id = es.session_id 
+LEFT JOIN sys.dm_exec_query_stats AS qs on sys.fn_varbintohexstr(er.sql_handle) = sys.fn_varbintohexstr(qs.sql_handle)
+CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st
+CROSS apply sys.dm_exec_query_plan (qs.plan_handle) AS qp
+WHERE st.dbid is not null
+ORDER BY qs.total_worker_time / qs.execution_count DESC
+--ORDER BY qs.total_worker_time DESC
+--ORDER BY qs.total_logical_reads DESC
+--ORDER BY qs.total_logical_writes DESC
+--ORDER BY qs.total_physical_reads DESC
+--ORDER BY qs.total_elapsed_time DESC
+--ORDER BY qs.execution_count DESC
+</code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Redis Command]]></title>
+      <url>http://yoursite.com/2016/12/06/Redis-Command/</url>
+      <content type="html"><![CDATA[<h2 id="Redis相關指令"><a href="#Redis相關指令" class="headerlink" title="Redis相關指令"></a>Redis相關指令</h2><pre><code>查詢Redis狀態:
+# ps -ef | grep redis
+# service &lt;redis instance name&gt; status
+ex. service redis_6379 status
+
+運作資訊查詢:
+# redis-cli -p &lt;port&gt; -a &lt;password&gt; info
+# redis-cli -p &lt;port&gt; -a &lt;password&gt; info Replication
+
+修改config:
+# vi more &lt;/path/config file name&gt;
+ex. vi /redis/etc/redis_6379.conf
+
+查詢log:
+# more &lt;/path/log file name&gt;
+ex. more /redis/log/redis_6379.log
+
+關閉Redis instance:
+# redis-cli -p &lt;port&gt; -a &lt;password&gt;
+&gt; shutdown
+
+啟動Redis instance:
+# service &lt;redis instance name&gt; start
+ex. service redis_6379 start
+
+測試redis-benchmark:
+# redis-benchmark -h &lt;host&gt; -p &lt;port&gt; -a &lt;password&gt; -q -n 100000 -d 512
+(可用 # redis-benchmark -h 查詢參數說明)
+
+測試Redis的latency:
+# redis-cli -p &lt;port&gt; --latency
+# redis-cli -p &lt;port&gt; --intrinsic-latency 100
+</code></pre><hr>
+<h2 id="Sentinel相關指令"><a href="#Sentinel相關指令" class="headerlink" title="Sentinel相關指令"></a>Sentinel相關指令</h2><pre><code>Config Sentinel:
+# cp /redis/src/redis-3.2.3/sentinel.conf /redis/etc
+# vi /redis/etc/sentinel.conf (修改內容如下:)
+
+port 26379
+sentinel monitor mymaster &lt;ip&gt; &lt;port&gt; 1
+sentinel auth-pass mymaster &lt;password&gt;
+sentinel down-after-milliseconds mymaster 30000
+#sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 180000
+#sentinel notification-script mymaster &lt;script-path&gt;
+
+#Add this two lines in the last
+daemonize yes
+logfile /redis/log/sentinel.log
+
+protect-mode no (如需遠端連此sentinel才需要這個設定)
+
+參考: https://segmentfault.com/a/1190000002680804
+
+[修改完sentinel.conf後啟動指令如下:]
+#redis-sentinel /redis/etc/sentinel.conf
+
+如果master/slave因故被sentinel切換了，回復方式如下:
+登入sentinel: # redis-cli -p 26379
+手動切換指令: &gt; sentinel failover mymaster
+(原本master的redis.conf也必須設定masterauth &lt;master-password&gt;才能正常運作)
+
+運作資訊查詢:
+# redis-cli -p 26379 info
+</code></pre>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Redo-Undo-Commit]]></title>
+      <url>http://yoursite.com/2016/11/01/Redo-Undo-Commit/</url>
+      <content type="html"><![CDATA[<h2 id="Redo"><a href="#Redo" class="headerlink" title="Redo"></a>Redo</h2><pre><code>Redo log files are the transaction logs for the database.
+Oracle maintains two types of redo log files: online and archived.
+They are used for recovery purposes.
+</code></pre><p>Redo log就是DB的交易記錄，最主要是的用途是復原資料。</p>
+<img src="/2016/11/01/Redo-Undo-Commit/redolog.png">
+<hr>
+<pre><code>Every Oracle database has at least two online redo log groups with at least a single member(redo log file) in each group.
+These online redo log groups are used in a circular fashion.
+</code></pre><p>每個Oracle DB 至少會有2個online的redo log組成redo log groups(每個redo log至少會有一個member)，並以循環的方使用。</p>
+<img src="/2016/11/01/Redo-Undo-Commit/RedoLogMembers.png">
+<hr>
+<h2 id="Undo"><a href="#Undo" class="headerlink" title="Undo"></a>Undo</h2><pre><code>Undo information is generated by the database as you make modifications to data to put it back the way it was before the modifications,
+in the event the transaction or statement you are executing fails for any reason or if you request it with a ROLLBACK statement.
+</code></pre><p>Undo是將資料回復到修改之前的狀態，通常因為某些原因或交易失敗而執行ROLLBACK。</p>
+<hr>
+<pre><code>The database is logically restored to the way it was, any changes are logically undone,
+the database blocks themselves, may well be different after a rollback.
+</code></pre><p>Rollback是邏輯上將資料回復到原本的狀態，在Rollback以後實際資料存放的區塊與原本完全不同。</p>
+<hr>
+<h2 id="Commit"><a href="#Commit" class="headerlink" title="Commit"></a>Commit</h2><pre><code>A COMMIT is generally a very fast operation, regardless of the transaction size.
+</code></pre><p>COMMIT通常是一個很快的動作，與交易的大小無關。</p>
+<hr>
+<pre><code>If a COMMIT of one row takes X units of time, and the COMMIT of 1,000 rows takes the same X units of time.
+</code></pre><p>COMMIT一筆資料列跟commit一千筆資料列同樣都是花費X的單位時間。</p>
+<hr>
+<pre><code>By committing only when you have to(when the logical unit of work is complete),
+you will not only increase performance,    but also reduce contention for shared resources
+(log files, various internal latches...).
+</code></pre><p>有需要時才COMMIT(商業邏輯完成時)，如此非但可以增加效能，更可以減少共用資源的使用。</p>
+<hr>
+<pre><code>It is best to size our transactions based on business need,
+not based on misguided attempts to lessen resource usage on the database.
+</code></pre><p>依據商業邏輯的需求去控制交易的大小，而非基於減少DB資源的誤導嘗試。</p>
+<hr>
+<pre><code>There are two contributing factors to the expense of the COMMIT:
+• We’ve obviously increased the round-trips to and from the database. 
+  If we commit every record, we are generating that much more traffic back and forth.
+• Every time we commit, we must wait for our redo to be written to disk. This will result in a “wait.” 
+  In this case, the wait is named “log file sync”.
+</code></pre><p>COMMIT對系統的兩個主要花費如下:<br>• 數據的往返，多次的Commit會增加更多的流量來回<br>• 每當我們COMMIT就必須等待RedoLog寫入Disk。這個等待叫作“log file sync.”</p>
+<hr>
+<pre><code>When we committed after every INSERT, we waited almost every time—and if you wait a little bit of time but you wait often, then it all adds up.
+</code></pre><p>每次COMMIT一筆INSERT都要等待一點時間，所以如果我們Commit很多次，結果會是這些時間的加總。</p>
+<hr>
+<pre><code>Before we even go to COMMIT in the database, we’ve already done the really hard work. 
+We’ve already modified the data in the database, so we’ve already done 99.9 percent of the work. 
+Operations such as the following have already taken place:
+• Undo blocks have been generated in the SGA.
+• Modified data blocks have been generated in the SGA.
+• Buffered redo for the preceding two items has been generated in the SGA.
+• Depending on the size of the preceding three items, and the amount of time spent,some combination of the previous data may be flushed onto disk already.
+• All locks have been acquired.
+</code></pre><p>在執行COMMIT前，其實DB已經把真正困難的工作都完成了，幾乎99.9%都已經完成…<br>• Undo區塊已在SGA產生好。<br>• 修改後的資料區塊已在SGA產生好。<br>• 前兩項的Buffered redo已在SGA產生好。<br>• 依據資料量的大小及時間而定，前三項的資料有部分也已經寫入Disk。<br>• 取得所有需要的locks。</p>
+<hr>
+<pre><code>When we COMMIT, all that is left to happen is the following:
+• An SCN is generated for our transaction.
+  (SCN is a simple timing mechanism Oracle uses to guarantee the ordering of transactions and to enable recovery from failure.
+   It is also used to guarantee read-consistency and checkpointing in the database.
+   Think of the SCN as a ticker; every time someone COMMITs, the SCN is incremented by one.)
+• LGWR writes all of our remaining buffered redo log entries to disk and records the SCN in the online redo log files as well.
+  This step is actually the COMMIT. If this step occurs, we have committed.
+  Our transaction entry is “removed” from V$TRANSACTION—this shows that we have committed.
+• All locks recorded in V$LOCK held by our session are released,
+  and everyone who was enqueued waiting on locks we held will be woken up and allowed to proceed with their work.
+• Some of the blocks our transaction modified will be visited and “cleaned out” in a fast mode if they are still in the buffer cache.
+  (Block cleanout refers to the lock-related information we store in the database block header.
+   Basically, we are cleaning out our transaction information on the block, so the next person who visits the block won’t have to.)
+</code></pre><p>在COMMIT之後剩餘所需執行的工作如下:<br>• 產生交易的SCN(System Change Number)。<br>• LGWR將所有剩餘的Buffered redo全部寫入Disk，並且在online redo log上記錄SCN。<br>• 釋放本交易相關的locks，所有正在等待我們的lock的工作都會被喚醒並執行。<br>• 原本交易所使用的區塊會被快速釋放或重新被其他的交易使用。</p>
+<hr>
+<pre><code>以上資料參考自: Thomas.Kyte - Expert Oracle Database Architecture
+</code></pre>]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[SqlServer Code Snippets]]></title>
+      <url>http://yoursite.com/2016/10/27/SqlServer-Code-Snippets/</url>
+      <content type="html"><![CDATA[<p>SqlServer2012提供了”Code Snippets”的功能，讓我們可以把常用的Scripts存成範本，並且可以很方便的取出來使用。</p>
+<p>設定方式如下:</p>
+<p>點選 Tools -&gt; Code Snippets Manager…<br><img src="/2016/10/27/SqlServer-Code-Snippets/manager.png"></p>
+<p>點選 Add… 選取存放Scripts的資料夾(ex.LDR_Snippets):<br><img src="/2016/10/27/SqlServer-Code-Snippets/addchoose.png"></p>
+<p>使用時在Query視窗按滑鼠右鍵點選Insert Snippet…(或使用快速鍵Ctrl+K,Ctrl+X):<br><img src="/2016/10/27/SqlServer-Code-Snippets/insert.png"></p>
+<p>點選我們的資料夾(LDR_Snippets):<br><img src="/2016/10/27/SqlServer-Code-Snippets/insert2.png"></p>
+<p>點選要使用的Scripts即會帶出範本內容:<br><img src="/2016/10/27/SqlServer-Code-Snippets/using.png"></p>
+<hr>
+<p>Scripts範本副檔名是.snippet，<br>如下圖，需要編輯的部分主要為:Title,Description,Author<br>,Declarations(自訂變數),Code:<br><img src="/2016/10/27/SqlServer-Code-Snippets/snippetFile.png"></p>
+<p>使用自訂變數游標會將變數反白，效果如下圖:<br><img src="/2016/10/27/SqlServer-Code-Snippets/sample.png"></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Oracle Useful SQLs]]></title>
+      <url>http://yoursite.com/2016/10/19/Oracle-Useful-SQLs/</url>
+      <content type="html"><![CDATA[<h2 id="V-Session相關"><a href="#V-Session相關" class="headerlink" title="V$Session相關"></a>V$Session相關</h2><pre><code>[Kill session]
+Login as DBA...
+SELECT * from v$session where type=&apos;USER&apos; and program=&apos;SQL Developer&apos;;
+ALTER system kill session &apos;SID,SERIAL#&apos; IMMEDIATE;
+
+[產生Kill session的scripts]
+SELECT &apos;Alter system kill session &apos;&apos;&apos; || SID || &apos;,&apos;|| serial# ||&apos;&apos;&apos; IMMEDIATE;&apos;  
+FROM V$SESSION WHERE username=&apos;xxx&apos;;
+
+[查詢Locked object name]
+SELECT a.sid, a.serial#,OBJECT_NAME
+FROM V$SESSION a, v$locked_object b, dba_objects c 
+where b.object_id = c.object_id 
+and a.sid = b.session_id;
+</code></pre><hr>
+<h2 id="System相關"><a href="#System相關" class="headerlink" title="System相關"></a>System相關</h2><pre><code>[清除shared_pool]測試performance前清除buffer cache。  **不可在production上執行
+Alter System flush shared_pool;
+
+[顯示dbms_output.put_line(&apos;&apos;);]
+SET SERVEROUTPUT ON;
+</code></pre><hr>
+<h2 id="DECLARE-語法的使用"><a href="#DECLARE-語法的使用" class="headerlink" title="DECLARE 語法的使用"></a>DECLARE 語法的使用</h2><pre><code>SET SERVEROUTPUT ON;
+DECLARE 
+  V_BUCODE CHAR(5):=&apos;BU003&apos;;
+  V_WAGERSN NUMBER:=99;
+  V_STAKEAMOUNT NUMBER;
+BEGIN
+  SELECT STAKEAMOUNT INTO V_STAKEAMOUNT FROM WAGER 
+   WHERE BUCODE= UPPER(V_BUCODE) AND WAGERSN=V_WAGERSN;
+  dbms_output.put_line(V_STAKEAMOUNT);
+END;
+/
+</code></pre><hr>
+<h2 id="DEFINE-語法的使用"><a href="#DEFINE-語法的使用" class="headerlink" title="DEFINE 語法的使用"></a>DEFINE 語法的使用</h2><pre><code>DEFINE BUCODE=&apos;BU003&apos;;
+DEFINE WAGERSN=2066498;
+
+select * from WAGER where BUCODE= UPPER(&apos;&amp;BUCODE&apos;) and WAGERSN=&amp;WAGERSN;
+
+DEFINE WAGERSN=2066499;
+select * from WAGER where BUCODE= &apos;&amp;BUCODE&apos; and WAGERSN=&amp;WAGERSN;
+
+UNDEFINE BUCODE;
+UNDEFINE WAGERSN;
+</code></pre><hr>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[OracleServerArchitecture]]></title>
+      <url>http://yoursite.com/2016/08/23/OracleServerArchitecture/</url>
+      <content type="html"><![CDATA[<img src="/2016/08/23/OracleServerArchitecture/OracleServerArchitecture.png">]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Linux Command]]></title>
+      <url>http://yoursite.com/2016/08/05/Linux-Command/</url>
+      <content type="html"><![CDATA[<h2 id="Linux的指令"><a href="#Linux的指令" class="headerlink" title="Linux的指令 "></a>Linux的指令 </h2><pre><code>核心查詢: 
+$ uname -a
+
+套裝系統版本查詢:
+$ cat /etc/issue
+
+查CPU資訊:
+$ cat /proc/cpuinfo
+
+查Memory資訊:
+$ free
+$ cat /proc/meminfo
+</code></pre><hr>
+<h2 id="Linux設定Proxy"><a href="#Linux設定Proxy" class="headerlink" title="Linux設定Proxy"></a>Linux設定Proxy</h2><pre><code>暫時生效
+$ export http_proxy=http://username:password@&quot;Proxy IP&quot;:port
+$ export ftp_proxy=http://username:passord@&quot;Proxy IP&quot;:port
+其中如果proxy server不須要帳密，就只要打http://&quot;Proxy IP&quot;:port即可
+example: export http_proxy=http://ping.wang:password@proxy.xuenn.com:3128
+
+永久生效
+$ vim ~/.bashrc   //將上面兩行export加入即可
+$ source ~/.bashrc
+
+YUM更新
+$ vim /etc/yum.conf
+加入: proxy=http://username:passord@&quot;Proxy IP&quot;:port
+</code></pre><hr>
+<h2 id="使用pscp在Windows跟Linux之間傳檔案"><a href="#使用pscp在Windows跟Linux之間傳檔案" class="headerlink" title="使用pscp在Windows跟Linux之間傳檔案"></a>使用pscp在Windows跟Linux之間傳檔案</h2><pre><code>(0)Download pscp.exe
+http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+
+(1)使用cmd先cd到pscp.exe所在的目錄
+
+(2)將Windows中的檔案傳送至Linux中的某個資料夾下:
+pscp Local_Path_FileName LinuxAccount@Linux_IP:Linux_Path
+example: D:\Tools&gt;pscp &quot;D:\DB Install\Redis_install_testing\redis320_install.tar.gz&quot; root@172.16.45.105:/tmp
+
+(3)將Linux中的某個資料夾下的某檔案傳送至Windows中的某個資料夾下:
+example: pscp root@xxx.xxx.xxx.xxx:/home/uploads/123.txt c:\
+</code></pre><hr>
+<h2 id="使用alias自訂指令別名"><a href="#使用alias自訂指令別名" class="headerlink" title="使用alias自訂指令別名"></a>使用alias自訂指令別名</h2><pre><code>暫時生效
+$ alias    //查詢別名清單
+$ alias abc=&apos;指令寫在這&apos;    //添加別名abc (只在當前視窗有效)
+$ unalias abc    //刪除別名abc (只在當前視窗有效)
+
+
+永久生效(Mac環境)
+$ cd ~    //進入home目錄
+$ vim .bash_profile    //存擋後永久生效
+
+example: alias abc=&apos;cd /Users/ping/Local &amp;&amp; sh connect.sh&apos;    //用&amp;&amp;連續兩個指令
+</code></pre>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Larry's Links]]></title>
+      <url>http://yoursite.com/2016/07/07/Larry-s-Links/</url>
+      <content type="html"><![CDATA[<p>.NET - Access Embeded Resource | Level Up<br><a href="http://larrynung.github.io/2014/04/14/dot-net-access-embeded-resource/" target="_blank" rel="noopener">http://larrynung.github.io/2014/04/14/dot-net-access-embeded-resource/</a></p>
+<p>Casting (Boxing/Unboxing) is better than parsing | Level Up<br><a href="http://larrynung.github.io/2015/08/23/casting-boxing-slash-unboxing-is-better-than-parsing/" target="_blank" rel="noopener">http://larrynung.github.io/2015/08/23/casting-boxing-slash-unboxing-is-better-than-parsing/</a></p>
+<p>IdGen - Twitter Snowflake-alike ID generator for .Net | Level Up<br><a href="https://larrynung.github.io/2016/04/06/idgen-twitter-snowflake-alike-id-generator-for-net/" target="_blank" rel="noopener">https://larrynung.github.io/2016/04/06/idgen-twitter-snowflake-alike-id-generator-for-net/</a></p>
+<p>StackExchange.Redis | Level Up<br><a href="http://larrynung.github.io/tags/StackExchange-Redis/" target="_blank" rel="noopener">http://larrynung.github.io/tags/StackExchange-Redis/</a></p>
+<p>Vagrant | Level Up<br><a href="http://larrynung.github.io/tags/Vagrant/" target="_blank" rel="noopener">http://larrynung.github.io/tags/Vagrant/</a></p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Oracle ASH and AWR]]></title>
+      <url>http://yoursite.com/2016/06/29/Oracle-ASH-and-AWR/</url>
+      <content type="html"><![CDATA[<h2 id="ASH-Active-Session-History-–-gt-in-Memory"><a href="#ASH-Active-Session-History-–-gt-in-Memory" class="headerlink" title="ASH: Active Session History –&gt; in Memory"></a>ASH: Active Session History –&gt; in Memory</h2><p>(每秒1個sample,依內存空間大約只暫存最近一個小時內的資料)</p>
+<pre><code>V$ACTIVE_SESSION_HISTORY
+  - Displays the active session history (ASH) sampled every second.
+V$METRIC
+  - Displays metric information.
+V$METRICNAME
+  - Displays the metrics associated with each metric group.
+V$METRIC_HISTORY
+  - Displays historical metrics.
+V$METRICGROUP
+  - Displays all metrics groups.
+
+查詢過去一小時的Top SQL:
+SELECT SESSION_TYPE,TOP_LEVEL_SQL_ID,SQL_ID,SQL_PLAN_HASH_VALUE,WAIT_CLASS,COUNT(1) as SECONDS
+FROM V$ACTIVE_SESSION_HISTORY 
+WHERE SAMPLE_TIME &gt;SYSDATE-1/24 
+GROUP BY SESSION_TYPE,TOP_LEVEL_SQL_ID,SQL_ID,SQL_PLAN_HASH_VALUE,WAIT_CLASS
+ORDER BY 6 DESC
+
+從ASH中查SQL plan:
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR(&apos;SQL_ID&apos;))
+
+More info: https://oracle-base.com/articles/10g/active-session-history
+</code></pre><hr>
+<h2 id="AWR-Automatic-Workload-Repository-–-gt-in-Disk"><a href="#AWR-Automatic-Workload-Repository-–-gt-in-Disk" class="headerlink" title="AWR: Automatic Workload Repository –&gt; in Disk"></a>AWR: Automatic Workload Repository –&gt; in Disk</h2><p>(將1/10的ASH sample從內存放到Disk)</p>
+<pre><code>DBA_HIST_ACTIVE_SESS_HISTORY
+  - Displays the history contents of the active session history.
+DBA_HIST_BASELINE
+  - Displays baseline information.
+DBA_HIST_DATABASE_INSTANCE
+  - Displays database environment information.
+DBA_HIST_SNAPSHOT
+  - Displays snapshot information.
+DBA_HIST_SQL_PLAN
+  - Displays SQL execution plans.
+DBA_HIST_WR_CONTROL
+  - Displays AWR settings.
+
+查詢過去一小時的Top SQL:
+SELECT SESSION_TYPE,TOP_LEVEL_SQL_ID,SQL_ID,SQL_PLAN_HASH_VALUE,WAIT_CLASS,COUNT(1) as SECONDS
+FROM DBA_HIST_ACTIVE_SESS_HISTORY 
+WHERE SAMPLE_TIME &gt;SYSDATE-1/24 
+GROUP BY SESSION_TYPE,TOP_LEVEL_SQL_ID,SQL_ID,SQL_PLAN_HASH_VALUE,WAIT_CLASS
+ORDER BY 6 DESC
+
+從AWR中查SQL plan:
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_AWR(&apos;SQL_ID&apos;))
+
+More info: https://oracle-base.com/articles/10g/automatic-workload-repository-10g
+</code></pre><hr>
+<h2 id="ADDM-Automatic-Database-Diagnostic-Monitor"><a href="#ADDM-Automatic-Database-Diagnostic-Monitor" class="headerlink" title="ADDM: Automatic Database Diagnostic Monitor"></a>ADDM: Automatic Database Diagnostic Monitor</h2><p>–&gt; 自動診斷及優化建議</p>
+<hr>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Oracle Command On Linux]]></title>
+      <url>http://yoursite.com/2016/06/07/Oracle-Command-On-Linux/</url>
+      <content type="html"><![CDATA[<h2 id="用root登入DB後-切換為oracle的使用者"><a href="#用root登入DB後-切換為oracle的使用者" class="headerlink" title="用root登入DB後,切換為oracle的使用者:"></a>用root登入DB後,切換為oracle的使用者:</h2><pre><code># su - oracle
+</code></pre><hr>
+<h2 id="檢查監聽器狀態"><a href="#檢查監聽器狀態" class="headerlink" title="檢查監聽器狀態:"></a>檢查監聽器狀態:</h2><pre><code>$ lsnrctl status
+</code></pre><hr>
+<h2 id="DB關閉"><a href="#DB關閉" class="headerlink" title="DB關閉:"></a>DB關閉:</h2><pre><code>關閉監聽器: 
+1)$ lsnrctl stop
+
+用sysdba登入sqlplus
+2)$ sqlplus &apos;/ as sysdba&apos;
+3)SQL&gt; shutdown immediate (shutdown abort)
+</code></pre><hr>
+<h2 id="DB開啟"><a href="#DB開啟" class="headerlink" title="DB開啟:"></a>DB開啟:</h2><pre><code>1)開啟監聽器:
+$ lsnrctl start
+
+用sysdba登入sqlplus
+2)$ sqlplus &apos;/ as sysdba&apos;
+3)SQL&gt; startup
+</code></pre><img src="/2016/06/07/Oracle-Command-On-Linux/startupDB.png">
+<hr>
+<h2 id="Oracle-Enterprise-Manager-EM"><a href="#Oracle-Enterprise-Manager-EM" class="headerlink" title="Oracle Enterprise Manager (EM)"></a>Oracle Enterprise Manager (EM)</h2><pre><code>查看dbconsole狀態:
+$ emctl status dbconsole
+
+重啟DB後需執行
+$ emctl start dbconsole
+才能使用https://192.168.56.101:1158/em
+
+開啟EM服務:
+$ emctl start dbconsole
+
+關閉EM服務:
+$ emctl stop dbconsole
+
+刪除一個EM資料庫:
+$ emca -repos drop
+
+創建一個EM資料庫(包含config):
+$ emca -repos create
+(重建一個EM資料庫: $ emca -repos recreate)
+
+刪除em的config:
+$ emca -deconfig dbcontrol db
+
+配置em的config(SID,1521):
+$ emca -config dbcontrol db
+
+若出現&apos;job_queue_processes&apos; must be greater than or equal to 1.的錯誤訊息,修改設定DB 參數job_queue_processes=10 後重跑
+$ emca -config dbcontrol db
+
+$ sqlplus &apos;/ as sysdba&apos;
+SQL&gt; show parameter job
+SQL&gt; alter system set job_queue_processes=10 scope=both;
+
+System altered.
+
+SQL&gt; show parameter job    
+</code></pre><hr>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> DB </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Hexo with Git]]></title>
+      <url>http://yoursite.com/2016/05/26/Hexo-with-Git/</url>
+      <content type="html"><![CDATA[<h2 id="Hexo的指令-Use-Git-Shell"><a href="#Hexo的指令-Use-Git-Shell" class="headerlink" title="Hexo的指令  (Use [Git Shell])"></a>Hexo的指令  (Use [Git Shell])</h2><pre><code>產生新文章
+&gt; hexo new [layout] &lt;title&gt;
+&gt; hexo new &quot;file title&quot;
+
+&gt; hexo clean
+
+重新產生(有修改就要重新generate)
+&gt; hexo g
+(hexo generate)
+
+發佈文章:
+&gt; hexo d
+(hexo deploy)
+
+&gt; hexo s
+(hexo server)
+執行此命令才能在本地使用http://localhost:4000/做測試:
+
+More info: [Hexo](https://hexo.io/zh-tw/docs/writing.html)
+</code></pre><hr>
+<h2 id="Git的指令"><a href="#Git的指令" class="headerlink" title="Git的指令"></a>Git的指令</h2><pre><code>將異動加入Git:
+&gt; git add .
+
+Commit本地並加上注解說明:
+&gt; git commit -m &quot;update&quot;
+
+將Source files推送到Git:
+&gt; git push origin hexo
+
+*使用 TravisCI 自動幫發佈 Hexo 部落格請參閱:
+http://larrynung.github.io/2016/08/11/Hexo-Auto-deploy-with-Travis-CI/
+(git push後就會自動clean-&gt;generate-&gt;deploy)
+TravisCI: https://travis-ci.org/
+
+將Git上的修改更新到本地端:
+&gt; git pull origin hexo
+</code></pre><hr>
+<h2 id="重抓的步驟"><a href="#重抓的步驟" class="headerlink" title="重抓的步驟"></a>重抓的步驟</h2><pre><code>1&gt; cd [folder]
+
+2&gt; git clone [url] [folder]
+
+切換到hexo的branch
+3&gt; git checkout hexo
+
+4.PC需安裝Node.js    
+安裝檔下載：https://nodejs.org/en/download/。
+
+若目錄尚未安裝npm套件,需執行此命令產生node_modules的目錄
+5&gt; npm install
+
+使用npm安裝hexo的command line interface功能
+6&gt; npm install hexo-cli -g
+
+
+ex.
+[url]= &quot;https://github.com/cpingwang/cpingwang.github.io.git&quot;
+[folder]= &quot;D:\blog&quot;  (要先建立好blog這個目錄)
+
+Open a [Git Shell]
+1&gt; cd &quot;D:\blog&quot;  (切換到工作目錄)
+2&gt; git clone &quot;https://github.com/cpingwang/cpingwang.github.io.git&quot; ./
+3&gt; git checkout hexo
+</code></pre><hr>
+<p>在文章中放圖片: <a href="http://larrynung.github.io/2016/06/29/Hexo-Post-asset-folder/" target="_blank" rel="noopener">http://larrynung.github.io/2016/06/29/Hexo-Post-asset-folder/</a></p>
+<hr>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>
